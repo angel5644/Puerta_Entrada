@@ -24,6 +24,10 @@
 
         //return false;
     });
+
+    $("#MainContent_txtNombreTransportista").on("change", function () {
+        alert("Cambió");
+    });
 });
 
 function mueveReloj() {

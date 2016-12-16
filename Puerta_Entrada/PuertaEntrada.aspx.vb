@@ -1,7 +1,12 @@
-﻿Public Class PuertaEntrada
+﻿Imports Oracle.ManagedDataAccess.Client
+
+Public Class PuertaEntrada
     Inherits System.Web.UI.Page
 
     Private _puertaEntradaService As PuertaEntradaService = New PuertaEntradaService()
+    Private ReadOnly msjFolioFechaRequerido As String = "Los campos folio y fecha de cita son requeridos"
+    Private ReadOnly msjFechaFormato As String = "La fecha de la cita debe tener el formato dd/MM/yyyy"
+    Private ReadOnly msjFolioNumerico As String = "El campo folio debe ser un valor numérico"
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -53,6 +58,7 @@
 
     Protected Sub Buscar(ByVal sender As Object, ByVal e As EventArgs)
         LimpiarPanelMensajes()
+        btnRegistrarDiscrepancia.Disabled = True
 
         Dim formulario As String = Request.Form("formPuertaEntrada")
         Dim folio As String = txtFolio.Value
@@ -87,6 +93,8 @@
                         txtHoraLlamado.Value = info.P_InfoTrsp.Trsp_Call_Date
                         txtTipoPaseEntrada.Value = info.P_InfoTrsp.Tipo_Pass
 
+                        ' Habilitar botón registrar discrepancia
+                        btnRegistrarDiscrepancia.Disabled = False
                         ' Agregar columna para archivo si p_EnableVGM = Y
                         If info.P_EnableVGM = "Y" Then
                             info.P_Cursor.Columns.Add("Archivo")
@@ -121,17 +129,17 @@
                     End Try
                 Else
                     ' Fecha no es válida
-                    msgError.Text = "La fecha de la cita debe tener el formato dd/MM/yyyy"
+                    msgError.Text = msjFechaFormato
                     divErrorPuertaEntrada.Visible = True
                 End If
             Else
                 ' Folio no es válido
-                msgError.Text = "El campo folio debe ser un valor numérico"
+                msgError.Text = msjFolioNumerico
                 divErrorPuertaEntrada.Visible = True
             End If
         Else
             ' Mostrar mensaje, campos requeridos
-            msgError.Text = "Por favor complete los campos requeridos"
+            msgError.Text = msjFolioFechaRequerido
             divErrorPuertaEntrada.Visible = True
         End If
 
@@ -228,21 +236,72 @@
 
     Protected Sub RegistrarDiscrepancia(sender As Object, e As EventArgs)
         LimpiarPanelMensajes()
-        Dim formulario As String = Request.Form("formModalRegistrar")
-        Dim comentarios As String = txtComentarios.Value
-        Dim tipoDiscrepancia As Integer = 0
-        Dim convertido As Boolean = Integer.TryParse(comboTipoDiscrepancia.SelectedValue, tipoDiscrepancia)
 
-        If (convertido) Then
-            ' Proceso para registrar discrepancia
+        Dim textoFolio As String = txtFolio.Value
+        Dim textoFechaCita As String = txtFechaCita.Value
 
-            ' Cerrar modal
-            ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "closeModal", "$('#modalRegistrarDiscrepancia').modal('hide');", True)
+        ' Validar folio y fecha
+        If Not String.IsNullOrEmpty(textoFolio) And Not String.IsNullOrEmpty(textoFechaCita) Then
+            ' Convertir fecha en formato especificado
+            Dim fechaCita As Date = Date.Now
+            Dim convertida As Boolean = Date.TryParseExact(textoFechaCita, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, fechaCita)
 
-            msgSuccess.Text = "Discrepancia registrada con éxito"
-            divSuccessPuertaEntrada.Visible = True
+            ' Si la fecha es válida
+            If convertida Then
+                If IsNumeric(textoFolio) Then
+                    Dim folio As Integer = Integer.Parse(textoFolio)
+                    Dim comentarios As String = txtComentarios.Value
+                    ' Obtener el tipo de discrepancia
+                    Dim tipoDiscrepancia As Integer = 0
+                    Dim disConvertida As Boolean = Integer.TryParse(comboTipoDiscrepancia.SelectedValue, tipoDiscrepancia)
+
+                    If (disConvertida) Then
+
+                        ' Proceso para registrar discrepancia
+                        Try
+                            ' Verificar que folio y fecha existen antes de enviar discrepancia
+                            Dim folioExiste As Boolean = If(Not String.IsNullOrEmpty(txtNombreTransportista.Value), True, False)
+
+                            If folioExiste Then
+                                Dim enviado As Integer = _puertaEntradaService.EnviarIncidente(folio, fechaCita, tipoDiscrepancia, comentarios)
+
+                                If enviado > 0 Then
+                                    ' Se envió la incidencia exitosamente
+                                    msgSuccess.Text = "Discrepancia enviada con éxito"
+                                    divSuccessPuertaEntrada.Visible = True
+                                Else
+                                    ' No se envió la incidencia
+                                    msgError.Text = "La discrepancia no se envió exitosamente. Por favor intente de nuevo más tarde."
+                                    divErrorPuertaEntrada.Visible = True
+                                End If
+                            End If
+                        Catch ex As Exception
+                            Dim mensaje As String = String.Format("Error al enviar discrepancia. Mensaje: {0}", ex.Message)
+                            msgError.Text = mensaje
+                            divErrorPuertaEntrada.Visible = True
+
+                            Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
+                        End Try
+
+                        ' Cerrar modal
+                        ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "closeModal", "$('#modalRegistrarDiscrepancia').modal('hide');", True)
+                    Else
+                        msgError.Text = "Tipo de discrepancia seleccionada no válida"
+                        divErrorPuertaEntrada.Visible = True
+                    End If
+                Else
+                    ' El folio debe ser numérico
+                    msgError.Text = msjFolioNumerico
+                    divErrorPuertaEntrada.Visible = True
+                End If
+            Else
+                ' La fecha no esta en formato correcto
+                msgError.Text = msjFechaFormato
+                divErrorPuertaEntrada.Visible = True
+            End If
         Else
-            msgError.Text = "Tipo de discrepancia seleccionada no válida"
+            ' El folio o la fecha estan vacios
+            msgError.Text = msjFolioFechaRequerido
             divErrorPuertaEntrada.Visible = True
         End If
 

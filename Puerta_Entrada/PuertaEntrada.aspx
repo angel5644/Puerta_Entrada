@@ -102,7 +102,7 @@
                         <input type="text" class="form-control" runat="server" readonly id="txtTipoPaseEntrada">
                     </div>
                     <div class="col-md-offset-1 col-md-3">
-                        <input type="button" value="Registrar Discrepancia" OnServerClick="AbrirModalRegistrar" runat="server" class="btn btn-default" id="btnRegistrarDiscrepancia" />
+                        <input type="button" value="Registrar Discrepancia" disabled OnServerClick="AbrirModalRegistrar" runat="server" class="btn btn-default" id="btnRegistrarDiscrepancia" />
                     </div>
                 </div>
 
