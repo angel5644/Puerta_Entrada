@@ -4,7 +4,7 @@
 
     // Init jquery validator
     $.validate({
-        lang: 'es'
+        
     });
 
     // Inicializar datepicker

@@ -5,8 +5,6 @@
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        '_puertaEntradaService.BlobToFile("~/App_Data/algo.pdf")
-
         If (Not IsPostBack) Then
 
             Dim tabla As DataTable = New DataTable("TablaIngreso")
@@ -35,11 +33,6 @@
         If lblP_EnableVGM.Text = "Y" Then
             AgregarBotonDinamico()
         End If
-
-        'Dim btn As New Button
-        'btn.Text = "Dynamic Button"
-        'AddHandler btn.Click, AddressOf AbrirArchivo
-        'Page.Controls.Add(btn)
     End Sub
 
     Private Sub AgregarBotonDinamico()
@@ -201,6 +194,10 @@
         LimpiarPanelMensajes()
         'lblModalTitle.Text = "Envio de correo por discrepancias en transporte" ' Titulo de modal
 
+        ' Limpiar campos
+        txtComentarios.Value = ""
+        comboTipoDiscrepancia.Items.Clear()
+
         Dim catalogoIncidentes As New List(Of Incident)
         Try
             divErrorPuertaEntrada.Visible = False
@@ -216,7 +213,6 @@
         End Try
 
         ' Llenar el dropdown con el catalogo
-        comboTipoDiscrepancia.Items.Clear()
         For Each incidente As Incident In catalogoIncidentes
             Dim item As ListItem = New ListItem(incidente.Cict_Name, incidente.Cict_Id)
 

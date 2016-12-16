@@ -285,22 +285,6 @@ Public Class PuertaEntradaService
 
     End Function
 
-    'Private Sub SqlBlob2File(ByVal DestFilePath As String)
-    '    Dim PictureCol As Integer = 0 ' the column # of the BLOB field
-    '    Dim cn As New SqlConnection("server=localhost;integrated security=yes;database=NorthWind")
-    '    Dim cmd As New SqlCommand("SELECT Picture FROM Categories WHERE CategoryName='Test'", cn)
-    '    cn.Open()
-    '    Dim dr As SqlDataReader = cmd.ExecuteReader()
-    '    dr.Read()
-    '    Dim b(dr.GetBytes(PictureCol, 0, Nothing, 0, Integer.MaxValue) - 1) As Byte
-    '    dr.GetBytes(PictureCol, 0, b, 0, b.Length)
-    '    dr.Close()
-    '    cn.Close()
-    '    Dim fs As New System.IO.FileStream(DestFilePath, IO.FileMode.Create, IO.FileAccess.Write)
-    '    fs.Write(b, 0, b.length)
-    '    fs.Close()
-    'End Sub
-
     ''' <summary>
     ''' Obtiene el catálogo de incidentes
     ''' </summary>
@@ -361,4 +345,132 @@ Public Class PuertaEntradaService
             End Try
         End Using
     End Function
+
+    Public Function IngresoPuertaEntrada(p_FolioTrsp As Integer, p_FechaCita As Date) As Integer
+
+
+        Using conn As New OracleConnection(dbContext.ObtenerCadenaConexion())
+            Try
+                conn.Open()
+
+                Using cmdComando As New OracleCommand("CTS.PK_CTS.p_IngresoPuertaEntrada", conn)
+
+                    cmdComando.CommandType = CommandType.StoredProcedure
+
+                    'p_IngresoPuertaEntrada(p_FolioTrsp IN NUMBER, p_FechaCita IN DATE) IS
+
+                    'Parametros de Entrada
+                    cmdComando.Parameters.Add("p_FolioTrsp", OracleDbType.Int32, p_FolioTrsp, ParameterDirection.Input)
+                    cmdComando.Parameters.Add("p_FechaCita", OracleDbType.Date, p_FechaCita, ParameterDirection.Input)
+
+
+                    cmdComando.ExecuteNonQuery()
+
+                    Return 1
+
+
+                End Using
+
+            Catch oex As OracleException
+                Dim mensaje = String.Format("Error en la conexion a la base de datos. Error code: {0}. Mensaje: {1}. Detalles: {2}", oex.ErrorCode, oex.Message, oex.ToString())
+                Debug.WriteLine(mensaje)
+
+                ' Regresamos datos vacios 
+                Throw
+            End Try
+
+        End Using
+
+        Return 0
+    End Function
+
+    Public Function EnviarIncidente(p_FolioTrsp As Integer, p_FechaCita As Date, p_IncidenciaId As Integer, p_Cuerpo As String) As Integer
+
+
+        Using conn As New OracleConnection(dbContext.ObtenerCadenaConexion())
+            Try
+                conn.Open()
+
+                Using cmdComando As New OracleCommand("CTS.PK_CTS.p_EnviarIncidente", conn)
+
+                    cmdComando.CommandType = CommandType.StoredProcedure
+
+                    'p_EnviarIncidente(p_Folio IN NUMBER, p_FechaCita IN DATE, p_IncidenciaId IN NUMBER, p_Cuerpo IN VARCHAR2) IS
+
+                    'Parametros de Entrada
+                    cmdComando.Parameters.Add("p_FolioTrsp", OracleDbType.Int32, p_FolioTrsp, ParameterDirection.Input)
+                    cmdComando.Parameters.Add("p_FechaCita", OracleDbType.Date, p_FechaCita, ParameterDirection.Input)
+                    cmdComando.Parameters.Add("p_IncidenciaId", OracleDbType.Int32, p_IncidenciaId, ParameterDirection.Input)
+                    cmdComando.Parameters.Add("p_Cuerpo", OracleDbType.Varchar2, p_Cuerpo, ParameterDirection.Input)
+
+                    cmdComando.ExecuteNonQuery()
+
+                    Return 1
+
+                End Using
+
+            Catch oex As OracleException
+                Dim mensaje = String.Format("Error en la conexion a la base de datos. Error code: {0}. Mensaje: {1}. Detalles: {2}", oex.ErrorCode, oex.Message, oex.ToString())
+                Debug.WriteLine(mensaje)
+
+
+                ' Regresamos datos vacios 
+                Throw
+            End Try
+
+        End Using
+
+        Return 0
+    End Function
+
+    Public Function F_GetRequestDocument(p_documentId As Integer) As RequestDocument
+        Dim result As New RequestDocument
+
+
+        Using conn As New OracleConnection(dbContext.ObtenerCadenaConexion())
+            Try
+                conn.Open()
+
+                Using cmdComando As New OracleCommand("CTS.PK_CTS.p_IngresoPuertaEntrada", conn)
+
+                    cmdComando.CommandType = CommandType.StoredProcedure
+
+                    'F_GetRequestDocument(p_documentId IN NUMBER, p_documentName OUT VARCHAR2, p_documentExtension OUT VARCHAR2) RETURN BLOB
+
+                    'Parametros de Entrada
+                    cmdComando.Parameters.Add("p_documentId", OracleDbType.Int32, p_documentId, ParameterDirection.Input)
+
+                    'Parametros de Salida
+                    cmdComando.Parameters.Add("p_documentName", OracleDbType.Varchar2).Direction = ParameterDirection.Output
+                    cmdComando.Parameters.Add("p_documentExtension", OracleDbType.Varchar2).Direction = ParameterDirection.Output
+                    cmdComando.Parameters.Add("p_documentExtension", OracleDbType.Blob).Direction = ParameterDirection.ReturnValue
+
+                    result.P_DocumentName = cmdComando.Parameters(0).Value.ToString()
+                    result.P_DocumentExtension = cmdComando.Parameters(1).Value.ToString()
+                    result.P_DocumentPath = cmdComando.Parameters(2).Value.ToString()
+
+
+
+
+                    Using dr As OracleDataReader = cmdComando.ExecuteReader()
+
+                    End Using
+                End Using
+
+                Return Nothing
+
+            Catch oex As OracleException
+                Dim mensaje = String.Format("Error en la conexion a la base de datos. Error code: {0}. Mensaje: {1}. Detalles: {2}", oex.ErrorCode, oex.Message, oex.ToString())
+                Debug.WriteLine(mensaje)
+
+                ' Regresamos datos vacios 
+                Throw
+            End Try
+
+        End Using
+
+        Return Nothing
+
+    End Function
+
 End Class
