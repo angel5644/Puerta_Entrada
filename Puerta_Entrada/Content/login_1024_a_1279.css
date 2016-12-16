@@ -1,0 +1,71 @@
+﻿body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#loggin {
+    position: relative;
+    background-repeat: no-repeat;
+    background-image: url(../Resources/1280_a_2440_Desarrollo/Loggin.png);
+    background-position: center;
+}
+
+#frmLoggin {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#credenciales {
+    position: relative;
+    width: 80%;
+    top: 45%;
+}
+
+#usuario {
+    position: relative;
+    display: inline;
+    width: 300px;
+    left: 52%;
+    font: 20px arial black;
+    color: White;
+}
+
+#contrasena {
+    position: relative;
+    display: inline;
+    width: 300px;
+    left: 52%;
+    font: 20px arial black;
+    color: White;
+}
+
+#opcionesLoggin {
+    position: relative;
+    display: inline;
+    left: 52%;
+}
+
+#recuperaContra {
+    position: relative;
+    width: 80%;
+    height: 30px;
+    top: 45%;
+    color: White;
+}
+
+#btnRecuperaContra {
+    position: relative;
+    width: 160px;
+    top: 10px;
+    left: 51.5%;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    color: White;
+}
+
+.credenciales input:focus {
+    background-color: #CCC;
+    border: 4px solid white;
+}

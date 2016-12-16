@@ -1,0 +1,120 @@
+﻿body
+{
+    margin:0px;
+    padding:0px;
+    overflow:hidden;
+}
+
+#loader{
+    position:absolute;
+    z-index:3;
+}
+
+#ocultoPrincipal{
+    position:absolute;
+
+    background-color:Black;
+    z-index:1;
+    opacity:0.6;
+}
+
+#principal{
+    position:relative;
+    
+}
+            
+#cabecera{
+    position:absolute;
+    
+    color:White;            
+
+    background-repeat:no-repeat;
+    background-position:center;
+}
+        
+#cabecera h1{
+    position:relative;
+    
+}
+        
+#contenido{
+    position:absolute;
+}
+        
+#contenido2{
+    position:absolute;
+}
+
+#contenido3{
+    position:absolute;
+    border:solid 1px white;
+}
+
+#contenido4{
+    position:absolute;
+    /*Se agrega este borde debido a que sin el, el submenu de este contenido se mueve
+      ligeramente hacia abajo, se buscara la causa para corregir*/
+    border:solid 1px white;
+}
+
+.Submenu{
+    position:absolute; 
+    text-align:center;
+    bottom:0%;
+}
+ 
+.Submenu input{
+    display:inline;
+    position:relative;
+    border:none;
+    background-color:inherit;
+    font-weight:bold;
+}
+
+.Submenu input:hover{
+    color:Navy;
+    text-decoration:underline;
+    cursor:pointer;
+}  
+        
+#pie
+{
+    position:absolute;
+}
+       
+#subPie{
+    position:absolute;
+   
+    color:White;
+
+    background-repeat:no-repeat;
+    background-position:center;
+}
+        
+#lblHora{
+    position:absolute;
+}
+
+
+
+#ulUsuario{
+    position:relative;
+    
+    list-style-type:none;
+}
+
+#ulUsuario li ul{
+    display:none;
+    position:relative;
+    list-style:none;
+}
+
+#ulUsuario li
+{
+    display:inline;
+}
+
+#ulUsuario li:hover > ul
+{
+    display:inline;
+}

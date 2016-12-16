@@ -1,0 +1,99 @@
+﻿body {
+    font-size: 14px;
+}
+
+#loader {
+    top: 15%;
+    left: 30%;
+}
+
+#principal {
+    position: relative;
+    width: 818px;
+    height: 640px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#cabecera {
+    position: absolute;
+    background-image: url(../Resources/1024_a_1279/Banner.png);
+    width: 818px;
+    height: 145px;
+    font-size: 14px;
+}
+
+#cabecera h1 {
+    width: 45%;
+    top: 30%;
+    left: 40%;
+}
+
+#contenido {
+    position: absolute;
+    width: 818px;
+    height: 450px;
+    top: 155px;
+}
+
+#contenido2 {
+    position: absolute;
+    width: 818px;
+    height: 450px;
+    top: 160px;
+}
+
+#contenido3 {
+    position: absolute;
+    width: 818px;
+    height: 450px;
+    top: 160px;
+}
+
+#contenido4 {
+    position: absolute;
+    width: 818px;
+    height: 450px;
+    top: 160px;
+}
+
+.Submenu {
+    width: 100%;
+    height: 5%;
+    font-size: 17pt;
+}
+
+.Submenu h6 {
+    margin-left: 3%;
+}
+
+
+#pie {
+    position: absolute;
+    width: 818px;
+    height: 25px;
+    top: 615px;
+    font-size: 16px;
+}
+
+#subPie {
+    background-image: url(../Resources/1024_a_1279/Subpie.png);
+    width: 100%;
+    height: 25px;
+}
+
+#lblHora {
+    top: 15%;
+    left: 3%;
+}
+
+#ulUsuario {
+    width: 18%;
+    top: -48%;
+    left: 70%;
+}
+
+#ulUsuario li ul {
+    left: -45px;
+    top: -38px;
+}

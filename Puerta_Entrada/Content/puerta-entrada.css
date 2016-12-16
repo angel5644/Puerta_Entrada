@@ -1,0 +1,162 @@
+﻿/* Clase para footer */
+.pie {
+    font-size: 16px;
+    background-image: url(Resources/1024_a_1279_Desarrollo/Subpie.png);
+    color: White;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: 'Times New Roman';
+}
+
+/*Arreglar width de modal historial de apoyo*/
+.modal-content{
+    min-width: 800px; 
+}
+
+.icon-date {
+    background-image: url('images/calendar.gif');
+    width: 150px;
+    height: 150px;
+    background-repeat: no-repeat;
+}
+
+/* Limitar tamaño de caja de comentarios */
+.text-limit-width {
+    max-width: 100%;
+}
+
+/* Header de tabla dinámica */
+.grid-table th{
+    background-color: #f5f5f5 !important;
+}
+
+#controlFechaCita {
+    padding-right: 0px;
+}
+
+#controlIconoFecha {
+    padding-left: 0px;
+}
+
+#cabecera {
+    background-image: url('Resources/1024_a_1279_Desarrollo/Banner.png');
+    width: 100%;
+    height: 145px;
+    font-size: 14px;
+    color: White;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+    #cabecera h1 {
+        width: 45%;
+        top: 30%;
+        left: 40%;
+        position: relative;
+    }
+
+h1 {
+    display: block;
+    font-size: 2em;
+    -webkit-margin-before: 0.67em;
+    -webkit-margin-after: 0.67em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+    font-weight: bold;
+}
+
+.Submenu {
+    position: absolute;
+    text-align: center;
+    bottom: 0%;
+}
+
+    .Submenu input {
+        display: inline;
+        position: relative;
+        border: none;
+        background-color: inherit;
+        font-weight: bold;
+    }
+
+        .Submenu input:hover {
+            color: Navy;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+#pie {
+    width: 818px;
+    height: 25px;
+    top: 615px;
+    font-size: 16px;
+}
+
+#subPie {
+    background-image: url(Resources/1024_a_1279_Desarrollo/Subpie.png);
+    width: 100%;
+    height: 25px;
+    position: absolute;
+    color: White;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: 'Times New Roman';
+}
+
+#subPie {
+    background-image: url(Resources/1024_a_1279_Desarrollo/Subpie.png);
+    width: 100%;
+    height: 25px;
+    position: absolute;
+    color: White;
+    background-repeat: no-repeat;
+    background-position: center;
+    font-family: 'Times New Roman';
+}
+
+#lblHora {
+    position: absolute;
+    top: 15%;
+    left: 22%;
+}
+
+label {
+    cursor: default;
+}
+
+#ulUsuario {
+    position: relative;
+    list-style-type: none;
+    margin-left: 65%;
+}
+
+    #ulUsuario li ul {
+        display: none;
+        position: relative;
+        list-style: none;
+    }
+
+    #ulUsuario li {
+        display: inline;
+    }
+
+        #ulUsuario li:hover > ul {
+            display: inline;
+        }
+
+#cntrCategoria {
+    position: relative;
+    width: 80%;
+    left: 20%;
+    display: none;
+}
+
+#cntrContenedor {
+    position: relative;
+    width: 80%;
+    left: 25%;
+    display: none;
+}
+
+#oculto { /*background-repeat:no-repeat; background-color:Black; width:80%; height:50%;position:absolute;left:10%;bottom:20%;z-index:1;opacity:0.5;*/
+}

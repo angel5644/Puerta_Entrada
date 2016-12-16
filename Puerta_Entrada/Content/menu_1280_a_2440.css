@@ -1,0 +1,222 @@
+﻿h4 {
+    color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 0.75em;
+    text-align: center;
+    position: relative;
+    top: 75%;
+}
+
+.divMini {
+    float: left;
+    border: 1px solid #5B5B60;
+    background: #E7E7E7;
+    background-repeat: no-repeat;
+    margin: 0 5% 3% 0;
+    width: 25%;
+    height: 29%;
+    opacity: 0.4;
+}
+
+    .divMini:hover {
+        opacity: 1;
+    }
+
+#imgAtras {
+    height: 100%;
+    width: 100%;
+}
+
+#imgAdelante {
+    height: 100%;
+    width: 100%;
+}
+
+/*--------------------------------------------------------------------------------------------------------------*/
+#menuPrincipal {
+    height: 100%;
+    width: 100%;
+    right: 0;
+}
+
+#opcion-mini1, #incidenciaspendautorizar, #administracionCajaAhorro {
+    margin-left: 7%;
+}
+
+
+img.mini {
+    position: relative;
+    width: 90%;
+    left: 5%;
+    top: 40%;
+}
+
+#ocultaDiv1, #ocultaDiv2, #ocultaDiv3, #ocultaDiv4 {
+    width: 70.2%;
+    position: absolute;
+    left: 16%;
+    top: 30%;
+    border-style: solid;
+    border-width: 4%;
+    border-color: #7E7E7E;
+    z-index: 1;
+}
+
+#opcion-mini1 {
+}
+
+#opcion-mini2 {
+}
+
+#incidencias {
+    background-image: url('../Resources/1280_a_2440/levantamientoIncidenciasMini.png');
+}
+
+#incidenciaspendautorizar {
+    background-image: url('../Resources/1280_a_2440/autorizarIncidenciasMini.png');
+}
+
+#administracionCfdi {
+    background-image:url('../Resources/1280_a_2440/administracionCfdiMini.png');
+    left: 50%;
+}
+
+#opcion-mini6 {
+}
+
+#opcion-mini7 {
+}
+
+#opcion-mini8 {
+}
+
+#opcion-mini9 {
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+#menuSistemaRecursosHumanos {
+    height: 100%;
+    width: 100%;
+    display: none;
+}
+
+/*--------------------------------------------------------------------------------------------------------------*/
+#menuAdministracionCfdi {
+    height: 100%;
+    width: 100%;
+    display: none;
+}
+
+
+#generacionCfdi {
+    margin-left: 7%;
+    background-image: url('../Resources/1280_a_2440/administracionCfdiMini.png');
+}
+
+#documentosCfdiGenerados {
+    background-image: url('../Resources/1280_a_2440/documentosCfdiGenerados.png');
+}
+
+#incapacidadesInformar {
+    background-image: url('../Resources/1280_a_2440/incapacidadesInformarMini.png');
+}
+
+#mantenimientoDatosGenerales {
+    margin-left: 7%;
+    background-image: url('../Resources/1280_a_2440/mantenimientoDatosGeneralesCfdiMini.png');
+}
+
+
+#mantenimientoCatalogosCfdi {
+    background-image: url('../Resources/1280_a_2440/mantenimientoCatalogosMini.png');
+}
+
+
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+#menuMantenimientoCatalogosCfdi {
+    height: 100%;
+    width: 100%;
+    display: none;
+}
+
+#mantenimientoConceptosSat {
+    margin-left: 7%;
+    background-image: url('../Resources/1280_a_2440/mantenimientoConceptosSatMini.png');
+}
+
+#mantenimientoTipoIncapacidadesSat {
+    background-image: url('../Resources/1280_a_2440/mantenimientoTipoIncapacidadesSatMini.png');
+}
+
+#mantenimientoArticulosCfdi {
+    background-image: url('../Resources/1280_a_2440/mantenimientoArticulosMini.png');
+}
+
+#mantenimientoSeriesFiscales {
+    margin-left: 7%;
+    background-image: url('../Resources/1280_a_2440/mantenimientoSeriesFiscales.png');
+}
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+#menuAdministracionNomina {
+    height: 100%;
+    width: 100%;
+    display: none;
+}
+
+#mantenimientoCatalogosNomina {
+    margin-left: 7%;
+    background-image: url('../Resources/1280_a_2440/mantenimientoCatalogosMini.png');
+}
+
+
+
+
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+#menuMantenimientoCatalogosNomina {
+    height: 100%;
+    width: 100%;
+    display: none;
+}
+
+#mantenimientoTiposConceptos {
+    margin-left: 7%;
+    /*background-image:url('../Resources/1280_a_2440/mantenimientoConceptosSatMini.png');*/
+}
+
+
+/*--------------------------------------------------------------------------------------------------------------*/
+#menuAdministracionCajaAhorro {
+    height: 100%;
+    width: 100%;
+    display: none;
+}
+
+#configuracionConceptosCajaAhorro {
+    margin-left: 7%;
+    background-image: none;
+}
+
+#generacionMoper {
+    background-image: none;
+}
+
+#procesamientoDescuentos {
+    background-image: none;
+}
+
+#confirmacionDescuentos {
+    margin-left: 7%;
+    background-image: none;
+}
