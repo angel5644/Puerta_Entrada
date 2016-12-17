@@ -7,6 +7,7 @@ Public Class PuertaEntrada
     Private ReadOnly msjFolioFechaRequerido As String = "Los campos folio y fecha de cita son requeridos"
     Private ReadOnly msjFechaFormato As String = "La fecha de la cita debe tener el formato dd/MM/yyyy"
     Private ReadOnly msjFolioNumerico As String = "El campo folio debe ser un valor numérico"
+    Private ReadOnly msjIngresoNoValido As String = "No es posible perimitir el ingreso. El folio o la fecha no son válidos"
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -98,9 +99,11 @@ Public Class PuertaEntrada
                         txtHoraLlamado.Value = info.P_InfoTrsp.Trsp_Call_Date
                         txtTipoPaseEntrada.Value = info.P_InfoTrsp.Tipo_Pass
 
-                        ' Habilitar botón registrar discrepancia
+                        ' Setear valores ocultos para posteriores validaciones
                         lblFolioValido.Text = folio
                         lblFechaValida.Text = fechaCita
+                        lblP_EnableVGM.Text = info.P_EnableVGM
+                        lblP_SolTarjeton.Text = info.P_SolTarjeton
 
                         ' Agregar columna para archivo si p_EnableVGM = Y
                         If info.P_EnableVGM = "Y" Then
@@ -111,7 +114,6 @@ Public Class PuertaEntrada
                         gridIngresoUnidades.DataSource = info.P_Cursor
                         gridIngresoUnidades.DataBind()
 
-                        lblP_EnableVGM.Text = info.P_EnableVGM
                         ' Agregar boton archivo
                         If info.P_EnableVGM = "Y" Then
                             AgregarBotonDinamico()
@@ -151,10 +153,6 @@ Public Class PuertaEntrada
         End If
 
         upPanelMensajes.Update()
-    End Sub
-
-    Protected Sub PermitirIngreso(sender As Object, e As EventArgs)
-        ' nothing
     End Sub
 
     Protected Sub AbrirArchivo(sender As Object, e As EventArgs)
@@ -241,11 +239,11 @@ Public Class PuertaEntrada
                 ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalRegistrarDiscrepancia", "$('#modalRegistrarDiscrepancia').modal();", True)
                 upModal.Update()
             Else
-                msgError.Text = "No es posible registrar una discrepancia. El folio o la fecha no son válidos"
+                msgError.Text = msjIngresoNoValido
                 divErrorPuertaEntrada.Visible = True
             End If
         Else
-            msgError.Text = "No es posible registrar una discrepancia. El folio o la fecha no son válidos"
+            msgError.Text = msjIngresoNoValido
             divErrorPuertaEntrada.Visible = True
         End If
 
@@ -321,6 +319,41 @@ Public Class PuertaEntrada
         End If
 
         upPanelMensajes.Update()
+    End Sub
+
+    Protected Sub PermitirIngreso(sender As Object, e As EventArgs)
+        LimpiarPanelMensajes()
+
+        ' Validar campos folio y fecha
+        If txtFolio.Value = lblFolioValido.Text And Not String.IsNullOrEmpty(txtNombreTransportista.Value) Then
+            If txtFechaCita.Value = lblFechaValida.Text Then
+                ' Limpiar campo tarjeton
+                txtNoTarjeton.Value = ""
+
+                lblP_SolTarjeton.Text = "Y" ' test
+
+                If lblP_SolTarjeton.Text = "Y" Then
+                    ' Mostrar modal
+                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalTarjeton", "$('#modalTarjeton').modal();", True)
+                    upModalTarjeton.Update()
+                Else
+                    ' Continuar el proceso, ingresar unidad
+                    IngresarUnidad(btnContinuarIngreso, EventArgs.Empty)
+                End If
+            Else
+                msgError.Text = "No es posible perimitir el ingreso. El folio o la fecha no son válidos"
+                divErrorPuertaEntrada.Visible = True
+            End If
+        Else
+            msgError.Text = "No es posible permitir el ingreso. El folio o la fecha no son válidos"
+            divErrorPuertaEntrada.Visible = True
+        End If
+
+        upPanelMensajes.Update()
+    End Sub
+
+    Protected Sub IngresarUnidad(sender As Object, e As EventArgs)
+        LimpiarPanelMensajes()
     End Sub
 
     Private Sub LimpiarPanelMensajes()

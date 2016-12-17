@@ -26,6 +26,17 @@
     });
 });
 
+function validarModalTarjeton()
+{
+    var modalValid = false;
+
+    $('#txtNoTarjeton').validate(function (valid, elem) {
+        modalValid = valid;
+    });
+
+    return modalValid;
+}
+
 function mueveReloj() {
     momentoActual = new Date()
 

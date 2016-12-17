@@ -21,7 +21,7 @@
     <asp:contentPlaceholder id="head" runat="server" />
 </head>
 <body>
-    <form Id="formPuertaEntrada" runat="server">
+    <form Id="formPuertaEntrada" runat="server" ClientIDMode="Static">
         <asp:ScriptManager runat="server" ID="ScriptManager" EnablePageMethods="true">
             <Scripts>
                 <%--To learn more about bundling scripts in ScriptManager see http://go.microsoft.com/fwlink/?LinkID=301884 --%>

@@ -110,6 +110,7 @@
             </div>
         </div>
         <asp:Label ID="lblP_EnableVGM" runat="server" Text="" Visible="false"></asp:Label>
+        <asp:Label ID="lblP_SolTarjeton" runat="server" Text="" Visible="false"></asp:Label>
 
         <%-- Tabla dinámica ingreso de unidades --%>
         <div class="row">
@@ -144,8 +145,6 @@
                                     <asp:Literal ID="ltEmbed" runat="server" />
                                 </div>
                             </div>
-                            
-                          <%--  <asp:Image ID="imageFile" runat="server" Visible="false"/>--%>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
@@ -155,7 +154,7 @@
             </asp:UpdatePanel>
         </div>
     </div>
-    <!-- Bootstrap Modal Dialog -->
+    <!-- Modal Registrar Discrepancia -->
     <div class="modal fade" id="modalRegistrarDiscrepancia" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <asp:UpdatePanel ID="upModal" runat="server" ChildrenAsTriggers="false" UpdateMode="Conditional">
@@ -185,8 +184,38 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <%--<asp:Button Text="Enviar" ID="btnEnviarDiscrepancia" CssClass="btn btn-default" runat="server" OnClick="RegistrarDiscrepancia" />--%>
                             <input type="button" value="Enviar" OnServerClick="RegistrarDiscrepancia" runat="server" class="btn btn-default" id="btnEnvDiscrepancia" />
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+        </div>
+    </div>
+     <!-- Modal Tarjeton -->
+    <div class="modal fade" id="modalTarjeton" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <asp:UpdatePanel ID="upModalTarjeton" runat="server" ChildrenAsTriggers="false" UpdateMode="Conditional">
+                <ContentTemplate>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">
+                                <asp:Label ID="lblModalTitTarjeton" runat="server" Text="Tarjeton"></asp:Label>
+                            </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="txtNoTarjeton" class="col-md-4 control-label">Número de Tarjetón</label>
+                                    <div class="col-md-8">
+                                        <input type="text" ClientIDMode="Static" data-validation-error-msg="El campo número de tarjetón debe ser numérico" data-validation="number" class="form-control" id="txtNoTarjeton" runat="server">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <asp:LinkButton CssClass="btn btn-default" Text="Continuar" runat="server" OnClick="IngresarUnidad" OnClientClick="return validarModalTarjeton();" ID="btnContinuarIngresoT" ></asp:LinkButton>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                         </div>
                     </div>

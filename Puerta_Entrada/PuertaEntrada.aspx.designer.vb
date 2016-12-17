@@ -194,6 +194,15 @@ Partial Public Class PuertaEntrada
     Protected WithEvents lblP_EnableVGM As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
+    '''lblP_SolTarjeton control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblP_SolTarjeton As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
     '''gridIngresoUnidades control.
     '''</summary>
     '''<remarks>
@@ -282,4 +291,40 @@ Partial Public Class PuertaEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnEnvDiscrepancia As Global.System.Web.UI.HtmlControls.HtmlInputButton
+    
+    '''<summary>
+    '''upModalTarjeton control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents upModalTarjeton As Global.System.Web.UI.UpdatePanel
+    
+    '''<summary>
+    '''lblModalTitTarjeton control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblModalTitTarjeton As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''txtNoTarjeton control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtNoTarjeton As Global.System.Web.UI.HtmlControls.HtmlInputText
+    
+    '''<summary>
+    '''btnContinuarIngresoT control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnContinuarIngresoT As Global.System.Web.UI.WebControls.LinkButton
 End Class
