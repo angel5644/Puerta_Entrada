@@ -338,7 +338,7 @@ Public Class PuertaEntrada
                     upModalTarjeton.Update()
                 Else
                     ' Continuar el proceso, ingresar unidad
-                    IngresarUnidad(btnContinuarIngreso, EventArgs.Empty)
+                    IngresarUnidad(btnContinuarIngresoT, EventArgs.Empty)
                 End If
             Else
                 msgError.Text = "No es posible perimitir el ingreso. El folio o la fecha no son válidos"
