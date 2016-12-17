@@ -11,26 +11,7 @@ Public Class PuertaEntrada
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If (Not IsPostBack) Then
-
-            Dim tabla As DataTable = New DataTable("TablaIngreso")
-            tabla.Columns.Add("Contenedor", Type.GetType("System.String"))
-            tabla.Columns.Add("Trafico", Type.GetType("System.String"))
-            tabla.Columns.Add("ISO", Type.GetType("System.String"))
-            tabla.Columns.Add("Tamaño", Type.GetType("System.String"))
-            tabla.Columns.Add("Tipo de Contenedor", Type.GetType("System.String"))
-            tabla.Columns.Add("Tipo de Carga", Type.GetType("System.String"))
-            tabla.Columns.Add("Sello 1", Type.GetType("System.String"))
-            tabla.Columns.Add("Peso Bruto", Type.GetType("System.String"))
-            tabla.Columns.Add("Fecha descarga del contenedor", Type.GetType("System.String"))
-            tabla.Columns.Add("Posicion", Type.GetType("System.String"))
-
-            Dim row As DataRow = tabla.NewRow()
-            For i As Integer = 0 To tabla.Columns.Count - 1
-                row(i) = ""
-            Next
-            tabla.Rows.Add(row)
-
-            gridIngresoUnidades.DataSource = tabla
+            gridIngresoUnidades.DataSource = InicializarDatatableIngreso()
             gridIngresoUnidades.DataBind()
         End If
 
@@ -39,6 +20,29 @@ Public Class PuertaEntrada
             AgregarBotonDinamico()
         End If
     End Sub
+
+    Public Function InicializarDatatableIngreso() As DataTable
+        Dim tabla As DataTable = New DataTable("TablaIngreso")
+        tabla.Columns.Add("Contenedor", Type.GetType("System.String"))
+        tabla.Columns.Add("Trafico", Type.GetType("System.String"))
+        tabla.Columns.Add("ISO", Type.GetType("System.String"))
+        tabla.Columns.Add("Tamaño", Type.GetType("System.String"))
+        tabla.Columns.Add("Tipo de Contenedor", Type.GetType("System.String"))
+        tabla.Columns.Add("Tipo de Carga", Type.GetType("System.String"))
+        tabla.Columns.Add("Sello 1", Type.GetType("System.String"))
+        tabla.Columns.Add("Peso Bruto", Type.GetType("System.String"))
+        tabla.Columns.Add("Fecha descarga del contenedor", Type.GetType("System.String"))
+        tabla.Columns.Add("Posicion", Type.GetType("System.String"))
+
+        Dim row As DataRow = tabla.NewRow()
+        For i As Integer = 0 To tabla.Columns.Count - 1
+            row(i) = ""
+        Next
+        tabla.Rows.Add(row)
+
+        Return tabla
+    End Function
+
 
     Private Sub AgregarBotonDinamico()
         For i As Integer = 0 To gridIngresoUnidades.Rows.Count - 1
@@ -58,7 +62,8 @@ Public Class PuertaEntrada
 
     Protected Sub Buscar(ByVal sender As Object, ByVal e As EventArgs)
         LimpiarPanelMensajes()
-        btnRegistrarDiscrepancia.Disabled = True
+        lblFolioValido.Text = String.Empty
+        lblFechaValida.Text = String.Empty
 
         Dim formulario As String = Request.Form("formPuertaEntrada")
         Dim folio As String = txtFolio.Value
@@ -94,7 +99,9 @@ Public Class PuertaEntrada
                         txtTipoPaseEntrada.Value = info.P_InfoTrsp.Tipo_Pass
 
                         ' Habilitar botón registrar discrepancia
-                        btnRegistrarDiscrepancia.Disabled = False
+                        lblFolioValido.Text = folio
+                        lblFechaValida.Text = fechaCita
+
                         ' Agregar columna para archivo si p_EnableVGM = Y
                         If info.P_EnableVGM = "Y" Then
                             info.P_Cursor.Columns.Add("Archivo")
@@ -202,36 +209,47 @@ Public Class PuertaEntrada
         LimpiarPanelMensajes()
         'lblModalTitle.Text = "Envio de correo por discrepancias en transporte" ' Titulo de modal
 
-        ' Limpiar campos
-        txtComentarios.Value = ""
-        comboTipoDiscrepancia.Items.Clear()
+        If txtFolio.Value = lblFolioValido.Text And Not String.IsNullOrEmpty(txtNombreTransportista.Value) Then
+            If txtFechaCita.Value = lblFechaValida.Text Then
+                ' Limpiar campos
+                txtComentarios.Value = ""
+                comboTipoDiscrepancia.Items.Clear()
 
-        Dim catalogoIncidentes As New List(Of Incident)
-        Try
-            divErrorPuertaEntrada.Visible = False
+                Dim catalogoIncidentes As New List(Of Incident)
+                Try
+                    divErrorPuertaEntrada.Visible = False
 
-            ' Obtener catalogo de incidentes
-            catalogoIncidentes = _puertaEntradaService.GetIncidentCatalog()
-        Catch ex As Exception
-            Dim mensaje As String = String.Format("Error al obtener catálogo de incidentes. Mensaje: {0}", ex.Message)
-            msgError.Text = mensaje
+                    ' Obtener catalogo de incidentes
+                    catalogoIncidentes = _puertaEntradaService.GetIncidentCatalog()
+                Catch ex As Exception
+                    Dim mensaje As String = String.Format("Error al obtener catálogo de incidentes. Mensaje: {0}", ex.Message)
+                    msgError.Text = mensaje
+                    divErrorPuertaEntrada.Visible = True
+
+                    Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
+                End Try
+
+                ' Llenar el dropdown con el catalogo
+                For Each incidente As Incident In catalogoIncidentes
+                    Dim item As ListItem = New ListItem(incidente.Cict_Name, incidente.Cict_Id)
+
+                    comboTipoDiscrepancia.Items.Add(item)
+                Next
+                comboTipoDiscrepancia.DataBind()
+
+                ' Mostrar modal
+                ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalRegistrarDiscrepancia", "$('#modalRegistrarDiscrepancia').modal();", True)
+                upModal.Update()
+            Else
+                msgError.Text = "No es posible registrar una discrepancia. El folio o la fecha no son válidos"
+                divErrorPuertaEntrada.Visible = True
+            End If
+        Else
+            msgError.Text = "No es posible registrar una discrepancia. El folio o la fecha no son válidos"
             divErrorPuertaEntrada.Visible = True
+        End If
 
-            Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
-        End Try
-
-        ' Llenar el dropdown con el catalogo
-        For Each incidente As Incident In catalogoIncidentes
-            Dim item As ListItem = New ListItem(incidente.Cict_Name, incidente.Cict_Id)
-
-            comboTipoDiscrepancia.Items.Add(item)
-        Next
-        comboTipoDiscrepancia.DataBind()
-
-        ' Mostrar modal
-        ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalRegistrarDiscrepancia", "$('#modalRegistrarDiscrepancia').modal();", True)
         upPanelMensajes.Update()
-        upModal.Update()
     End Sub
 
     Protected Sub RegistrarDiscrepancia(sender As Object, e As EventArgs)
@@ -259,21 +277,18 @@ Public Class PuertaEntrada
 
                         ' Proceso para registrar discrepancia
                         Try
-                            ' Verificar que folio y fecha existen antes de enviar discrepancia
-                            Dim folioExiste As Boolean = If(Not String.IsNullOrEmpty(txtNombreTransportista.Value), True, False)
+                            Dim enviado As Integer = _puertaEntradaService.EnviarIncidente(folio, fechaCita, tipoDiscrepancia, comentarios)
 
-                            If folioExiste Then
-                                Dim enviado As Integer = _puertaEntradaService.EnviarIncidente(folio, fechaCita, tipoDiscrepancia, comentarios)
+                            If enviado > 0 Then
+                                ' Mostrar mensaje si se envió exitosamente
+                                ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "msgEnviado", "alert('Discrepancia enviada con éxito');", True)
 
-                                If enviado > 0 Then
-                                    ' Se envió la incidencia exitosamente
-                                    msgSuccess.Text = "Discrepancia enviada con éxito"
-                                    divSuccessPuertaEntrada.Visible = True
-                                Else
-                                    ' No se envió la incidencia
-                                    msgError.Text = "La discrepancia no se envió exitosamente. Por favor intente de nuevo más tarde."
-                                    divErrorPuertaEntrada.Visible = True
-                                End If
+                                ' Cargar página de nuevo
+                                ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "loadCurrentPage", "loadCurrentPage();", True)
+                            Else
+                                ' No se envió la incidencia
+                                msgError.Text = "La discrepancia no se envió exitosamente. Por favor intente de nuevo más tarde."
+                                divErrorPuertaEntrada.Visible = True
                             End If
                         Catch ex As Exception
                             Dim mensaje As String = String.Format("Error al enviar discrepancia. Mensaje: {0}", ex.Message)
@@ -313,6 +328,32 @@ Public Class PuertaEntrada
         divSuccessPuertaEntrada.Visible = False
         msgError.Text = ""
         divErrorPuertaEntrada.Visible = False
+    End Sub
+
+    Public Sub LimpiarTodo()
+
+        ' Lipiar campos de busqueda 
+        txtFolio.Value = ""
+        txtFechaCita.Value = ""
+
+        ' Limpiar cambios de info prs
+        txtPlacas.Value = ""
+        txtTipoTrasporte.Value = ""
+        txtNombreTransportista.Value = ""
+        txtLicencia.Value = ""
+        txtTipoLicencia.Value = ""
+        txtOperador.Value = ""
+        txtHoraLlamado.Value = ""
+        txtTipoPaseEntrada.Value = ""
+
+        ' Limpiar datatable
+        gridIngresoUnidades.DataSource = InicializarDatatableIngreso()
+        gridIngresoUnidades.DataBind()
+
+        ' Limpiar campos hidden
+        lblFechaValida.Text = ""
+        lblFolioValido.Text = ""
+        lblP_EnableVGM.Text = ""
     End Sub
 
 End Class

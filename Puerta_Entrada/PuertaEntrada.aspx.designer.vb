@@ -86,6 +86,24 @@ Partial Public Class PuertaEntrada
     Protected WithEvents btnBuscar As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
+    '''lblFolioValido control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblFolioValido As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''lblFechaValida control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblFechaValida As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
     '''txtPlacas control.
     '''</summary>
     '''<remarks>

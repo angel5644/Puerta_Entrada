@@ -61,7 +61,8 @@
                         <asp:Button Text="Buscar" ID="btnBuscar" CssClass="btn btn-default" runat="server" OnClick="Buscar" />
                     </div>
                 </div>
-
+                 <asp:Label ID="lblFolioValido" runat="server" Text="" Visible="false"></asp:Label>
+                 <asp:Label ID="lblFechaValida" runat="server" Text="" Visible="false"></asp:Label>
                 <div class="form-group">
                     <label for="placas" class="col-md-1 control-label">Placas</label>
                     <div class="col-md-2">
@@ -102,7 +103,7 @@
                         <input type="text" class="form-control" runat="server" readonly id="txtTipoPaseEntrada">
                     </div>
                     <div class="col-md-offset-1 col-md-3">
-                        <input type="button" value="Registrar Discrepancia" disabled OnServerClick="AbrirModalRegistrar" runat="server" class="btn btn-default" id="btnRegistrarDiscrepancia" />
+                        <input type="button" value="Registrar Discrepancia" OnServerClick="AbrirModalRegistrar" runat="server" class="btn btn-default" id="btnRegistrarDiscrepancia" />
                     </div>
                 </div>
 
@@ -130,7 +131,7 @@
         <div class="modal-dialog modal-lg">
             <asp:UpdatePanel ID="upPanelFile" runat="server" ChildrenAsTriggers="false" UpdateMode="Conditional">
                 <ContentTemplate>
-                    <div class="modal-content">
+                    <div class="modal-content modal-limit-file">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                             <h4 class="modal-title">
