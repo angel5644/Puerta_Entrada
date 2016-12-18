@@ -4,7 +4,7 @@
 
     // Init jquery validator
     $.validate({
-        
+        //modules : 'toggleDisabled'
     });
 
     // Inicializar datepicker

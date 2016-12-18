@@ -8,6 +8,9 @@ Public Class PuertaEntrada
     Private ReadOnly msjFechaFormato As String = "La fecha de la cita debe tener el formato dd/MM/yyyy"
     Private ReadOnly msjFolioNumerico As String = "El campo folio debe ser un valor numérico"
     Private ReadOnly msjIngresoNoValido As String = "No es posible perimitir el ingreso. El folio o la fecha no son válidos"
+    Private ReadOnly msjDiscrepanciaNoValida As String = "No es posible registrar la discrepancia. El folio o la fecha no son válidos"
+    Private ReadOnly formatoFecha As String = "dd/MM/yyyy"
+    Private ReadOnly msjNoTarjNumerico As String = "El campo número de tarjetón debe ser numérico"
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -20,6 +23,7 @@ Public Class PuertaEntrada
         If lblP_EnableVGM.Text = "Y" Then
             AgregarBotonDinamico()
         End If
+
     End Sub
 
     Public Function InicializarDatatableIngreso() As DataTable
@@ -57,7 +61,6 @@ Public Class PuertaEntrada
             ' OnServerClick="AbrirModalRegistrar" runat="server"
             btnArchivo.ID = ("btnArchivo" + i.ToString())
             gridIngresoUnidades.Rows(i).Cells(lastCell).Controls.Add(btnArchivo)
-
         Next
     End Sub
 
@@ -79,7 +82,7 @@ Public Class PuertaEntrada
                 divErrorPuertaEntrada.Visible = False
 
                 Dim fechaConvertida As Date = Date.Now
-                Dim convertida As Boolean = Date.TryParseExact(fechaCita, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, fechaConvertida)
+                Dim convertida As Boolean = Date.TryParseExact(fechaCita, formatoFecha, System.Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, fechaConvertida)
 
                 If (convertida) Then
                     divErrorPuertaEntrada.Visible = False
@@ -239,11 +242,11 @@ Public Class PuertaEntrada
                 ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalRegistrarDiscrepancia", "$('#modalRegistrarDiscrepancia').modal();", True)
                 upModal.Update()
             Else
-                msgError.Text = msjIngresoNoValido
+                msgError.Text = msjDiscrepanciaNoValida
                 divErrorPuertaEntrada.Visible = True
             End If
         Else
-            msgError.Text = msjIngresoNoValido
+            msgError.Text = msjDiscrepanciaNoValida
             divErrorPuertaEntrada.Visible = True
         End If
 
@@ -260,7 +263,7 @@ Public Class PuertaEntrada
         If Not String.IsNullOrEmpty(textoFolio) And Not String.IsNullOrEmpty(textoFechaCita) Then
             ' Convertir fecha en formato especificado
             Dim fechaCita As Date = Date.Now
-            Dim convertida As Boolean = Date.TryParseExact(textoFechaCita, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, fechaCita)
+            Dim convertida As Boolean = Date.TryParseExact(textoFechaCita, formatoFecha, System.Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, fechaCita)
 
             ' Si la fecha es válida
             If convertida Then
@@ -279,7 +282,7 @@ Public Class PuertaEntrada
 
                             If enviado > 0 Then
                                 ' Mostrar mensaje si se envió exitosamente
-                                ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "msgEnviado", "alert('Discrepancia enviada con éxito');", True)
+                                ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "msgEnviado", "alert('Discrepancia enviada con éxito. El módulo será limpiado.');", True)
 
                                 ' Cargar página de nuevo
                                 ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "loadCurrentPage", "loadCurrentPage();", True)
@@ -341,11 +344,11 @@ Public Class PuertaEntrada
                     IngresarUnidad(btnContinuarIngresoT, EventArgs.Empty)
                 End If
             Else
-                msgError.Text = "No es posible perimitir el ingreso. El folio o la fecha no son válidos"
+                msgError.Text = msjIngresoNoValido
                 divErrorPuertaEntrada.Visible = True
             End If
         Else
-            msgError.Text = "No es posible permitir el ingreso. El folio o la fecha no son válidos"
+            msgError.Text = msjIngresoNoValido
             divErrorPuertaEntrada.Visible = True
         End If
 
@@ -354,6 +357,66 @@ Public Class PuertaEntrada
 
     Protected Sub IngresarUnidad(sender As Object, e As EventArgs)
         LimpiarPanelMensajes()
+
+        Dim textoFolio As String = txtFolio.Value
+        Dim textoFechaCita As String = txtFechaCita.Value
+
+        ' Validar folio y fecha
+        If Not String.IsNullOrEmpty(textoFolio) And Not String.IsNullOrEmpty(textoFechaCita) Then
+            ' Convertir fecha en formato especificado
+            Dim fechaCita As Date = Date.Now
+            Dim convertida As Boolean = Date.TryParseExact(textoFechaCita, formatoFecha, System.Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, fechaCita)
+
+            ' Si la fecha es válida
+            If convertida Then
+                If IsNumeric(textoFolio) Then
+                    ' Convertir folio
+                    Dim folio As Integer = Integer.Parse(textoFolio)
+                    If IsNumeric(txtNoTarjeton.Value) Then
+                        Try
+                            ' Ingresar unidad
+                            Dim exito As Integer = _puertaEntradaService.IngresoPuertaEntrada(folio, fechaCita)
+
+                            If exito > 0 Then
+                                ' Mostrar mensaje si el procedimiento se ejecutó con exito
+                                ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "msgIngresado", "alert('Ingreso de unidad realizado con éxito. El módulo será limpiado.');", True)
+
+                                ' Cargar página de nuevo
+                                ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "loadCurrentPage", "loadCurrentPage();", True)
+                            Else
+                                ' No se ejecutó exitosamente
+                                msgError.Text = "El ingreso de la unidad no se realizó correctamente. Por favor intente de nuevo más tarde."
+                                divErrorPuertaEntrada.Visible = True
+                            End If
+                        Catch ex As Exception
+                            Dim mensaje As String = String.Format("Error al realizar el ingreso de la unidad. Mensaje: {0}", ex.Message)
+                            msgError.Text = mensaje
+                            divErrorPuertaEntrada.Visible = True
+
+                            Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
+                        End Try
+                    Else
+                        ' El número de tarjetón debe ser numérico
+                        msgError.Text = msjNoTarjNumerico
+                        divErrorPuertaEntrada.Visible = True
+                    End If
+                Else
+                    ' El folio debe ser numérico
+                    msgError.Text = msjFolioNumerico
+                    divErrorPuertaEntrada.Visible = True
+                End If
+            Else
+                ' La fecha no esta en formato correcto
+                msgError.Text = msjFechaFormato
+                divErrorPuertaEntrada.Visible = True
+            End If
+        Else
+            ' El folio o la fecha estan vacios
+            msgError.Text = msjFolioFechaRequerido
+            divErrorPuertaEntrada.Visible = True
+        End If
+
+        upPanelMensajes.Update()
     End Sub
 
     Private Sub LimpiarPanelMensajes()

@@ -365,12 +365,9 @@ Public Class PuertaEntradaService
                     cmdComando.Parameters.Add("p_FolioTrsp", OracleDbType.Int32, p_FolioTrsp, ParameterDirection.Input)
                     cmdComando.Parameters.Add("p_FechaCita", OracleDbType.Date, p_FechaCita, ParameterDirection.Input)
 
-
                     cmdComando.ExecuteNonQuery()
 
                     Return 1
-
-
                 End Using
 
             Catch oex As OracleException

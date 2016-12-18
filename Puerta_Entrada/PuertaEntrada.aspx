@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Ingreso de Unidades" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="PuertaEntrada.aspx.vb" Inherits="Puerta_Entrada.PuertaEntrada" %>
+﻿<%@ Page Title="Ingreso de Unidades" Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="PuertaEntrada.aspx.vb" Inherits="Puerta_Entrada.PuertaEntrada" %>
 
 <asp:content contentplaceholderid="head" runat="server">
     <%-- Estilos --%>
@@ -208,7 +208,7 @@
                             <div class="form-horizontal">
                                 <div class="form-group">
                                     <label for="txtNoTarjeton" class="col-md-4 control-label">Número de Tarjetón</label>
-                                    <div class="col-md-8">
+                                    <div class="col-md-4">
                                         <input type="text" ClientIDMode="Static" data-validation-error-msg="El campo número de tarjetón debe ser numérico" data-validation="number" class="form-control" id="txtNoTarjeton" runat="server">
                                     </div>
                                 </div>
