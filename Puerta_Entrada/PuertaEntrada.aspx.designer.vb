@@ -248,6 +248,15 @@ Partial Public Class PuertaEntrada
     Protected WithEvents ltEmbed As Global.System.Web.UI.WebControls.Literal
     
     '''<summary>
+    '''imageArchivo control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents imageArchivo As Global.System.Web.UI.WebControls.Image
+    
+    '''<summary>
     '''upModal control.
     '''</summary>
     '''<remarks>

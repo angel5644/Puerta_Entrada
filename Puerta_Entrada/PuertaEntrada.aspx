@@ -142,7 +142,8 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <asp:Literal ID="ltEmbed" runat="server" />
+                                    <asp:Literal ID="ltEmbed" runat="server" Visible="false" />
+                                    <asp:Image ID="imageArchivo" runat="server" Visible="false"/>
                                 </div>
                             </div>
                         </div>

@@ -26,8 +26,8 @@
                 context.Response.AppendHeader("Content-Disposition", Convert.ToString("attachment; filename=") & doc.P_DocumentName)
             End If
             context.Response.Cache.SetCacheability(HttpCacheability.NoCache)
-            If fileType = "image" Then
-                context.Response.ContentType = "image/jpg"
+            If fileType.Contains("image") Then
+                context.Response.ContentType = fileType
             ElseIf fileType = "pdf" Then
                 context.Response.ContentType = "application/pdf"
             End If

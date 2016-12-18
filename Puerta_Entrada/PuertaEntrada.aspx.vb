@@ -11,6 +11,7 @@ Public Class PuertaEntrada
     Private ReadOnly msjDiscrepanciaNoValida As String = "No es posible registrar la discrepancia. El folio o la fecha no son válidos"
     Private ReadOnly formatoFecha As String = "dd/MM/yyyy"
     Private ReadOnly msjNoTarjNumerico As String = "El campo número de tarjetón debe ser numérico"
+    Private ReadOnly extImagValidas As String() = New String() {"jpg", "bmp", "gif", "png", "tif"} ' Agregar más extensiones si es necesario
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -47,7 +48,6 @@ Public Class PuertaEntrada
 
         Return tabla
     End Function
-
 
     Private Sub AgregarBotonDinamico()
         For i As Integer = 0 To gridIngresoUnidades.Rows.Count - 1
@@ -163,41 +163,62 @@ Public Class PuertaEntrada
 
         Try
             Dim requestId As String = gridIngresoUnidades.Rows(0).Cells(1).Text ' Request cell value 
-            Dim docId As Integer = Integer.Parse(requestId) ' get id 'width=""500px"" height=""600px""
+            Dim docId As Integer = 0
+            Dim idConvertido As Boolean = Integer.TryParse(requestId, docId) ' get id 'width=""500px"" height=""600px""
 
-            Dim embed As String = ""
-            Dim fileType As String = "image"
-            Dim contentType As String = ""
+            If idConvertido Then
+                Dim embed As String = ""
+                Dim fileType As String = ""
+                Dim esValido As Boolean = False ' Variable para saber si el archivo a mostrar le válido
 
-            ' id image jpg: 5748
-            ' id pdf file: 3009
-            Dim doc As RequestDocument = _puertaEntradaService.ReadFile(docId)
+                ' id image jpg: 5748
+                ' id image/png: 15697
+                ' id pdf file: 3009
+                ' Obtener el archivo
+                docId = 15697 ' test
+                Dim doc As RequestDocument = _puertaEntradaService.ReadFile(docId)
+                lblNombreArchivo.Text = doc.P_DocumentName
 
-            lblNombreArchivo.Text = doc.P_DocumentName
-
-            ' Comprobar si es archivo pdf
-            If doc.P_DocumentExtension = "pdf" Then
-                fileType = "pdf"
-                embed = "<object data=""{0}"" width=""100%"" height=""600px"" type=""application/pdf"" >"
-                embed += "Si no puedes ver el archivo, lo puedes descargar desde <a href = ""{0}&download=1"">aquí</a>"
-                embed += " o descargar <a target = ""_blank"" href = ""http://get.adobe.com/reader/"">Adobe PDF Reader</a> para ver el archivo."
-                embed += "</object>"
-            Else
-                fileType = "image"
-                ' Comprobar si es imagen
-                If doc.P_DocumentExtension = "jpg" Then
-                    embed = "<object data=""{0}"" class=""img-responsive"" type=""image/jpg"" >"
+                ' Comprobar si es archivo pdf
+                If doc.P_DocumentExtension = "pdf" Then
+                    esValido = True
+                    fileType = "pdf"
+                    embed = "<object data=""{0}"" width=""100%"" height=""600px"" type=""application/pdf"" >"
+                    embed += "Si no puedes ver el archivo, lo puedes descargar desde <a href = ""{0}&download=1"">aquí</a>"
+                    embed += " o descargar <a target = ""_blank"" href = ""http://get.adobe.com/reader/"">Adobe PDF Reader</a> para ver el archivo."
                     embed += "</object>"
-                End If
-            End If
-            Dim url As String = String.Format(ResolveUrl("~/Default.aspx?Id={0}&fileType={1}"), docId, fileType)
-            ltEmbed.Text = String.Format(embed, url)
 
-            ' Mostrar modal
-            ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalFile", "$('#modalFile').modal();", True)
-            upPanelFile.Update()
+                    Dim url As String = String.Format(ResolveUrl("~/Default.aspx?Id={0}&fileType={1}"), docId, fileType)
+                    ltEmbed.Text = String.Format(embed, url)
+                    ltEmbed.Visible = True
+                Else
+                    If ExtImagenEsValida(doc.P_DocumentExtension) Then
+                        esValido = True
+                        fileType = String.Format("image/{0}", doc.P_DocumentExtension)
+
+                        ' Obtener datos de imagen
+                        Dim base64String As String = Convert.ToBase64String(doc.File, 0, doc.File.Length)
+
+                        ' Setear datos de imagen
+                        imageArchivo.ImageUrl = Convert.ToString(String.Format("data:{0};base64,", fileType)) & base64String
+                        imageArchivo.Visible = True
+                        imageArchivo.CssClass = "img-responsive"
+                    Else
+                        msgError.Text = "No es un extensión de imagen válida. Extensiones soportadas: jpg, bmp, gif, png, tif"
+                        divErrorPuertaEntrada.Visible = True
+                    End If
+                End If
+
+                If esValido Then
+                    ' Mostrar modal
+                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalFile", "$('#modalFile').modal();", True)
+                    upPanelFile.Update()
+                End If
+            Else
+
+            End If
         Catch ex As Exception
-            Dim mensaje As String = String.Format("Error al obtener abrir archivo. Mensaje: {0}", ex.Message)
+            Dim mensaje As String = String.Format("Error al abrir archivo. Mensaje: {0}", ex.Message)
 
             msgError.Text = mensaje
             divErrorPuertaEntrada.Visible = True
@@ -333,8 +354,6 @@ Public Class PuertaEntrada
                 ' Limpiar campo tarjeton
                 txtNoTarjeton.Value = ""
 
-                lblP_SolTarjeton.Text = "Y" ' test
-
                 If lblP_SolTarjeton.Text = "Y" Then
                     ' Mostrar modal
                     ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalTarjeton", "$('#modalTarjeton').modal();", True)
@@ -372,34 +391,35 @@ Public Class PuertaEntrada
                 If IsNumeric(textoFolio) Then
                     ' Convertir folio
                     Dim folio As Integer = Integer.Parse(textoFolio)
-                    If IsNumeric(txtNoTarjeton.Value) Then
-                        Try
-                            ' Ingresar unidad
-                            Dim exito As Integer = _puertaEntradaService.IngresoPuertaEntrada(folio, fechaCita)
 
-                            If exito > 0 Then
-                                ' Mostrar mensaje si el procedimiento se ejecutó con exito
-                                ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "msgIngresado", "alert('Ingreso de unidad realizado con éxito. El módulo será limpiado.');", True)
+                    Try
+                        ' Ingresar unidad
+                        Dim exito As Integer = 0
+                        If lblP_SolTarjeton.Text = "Y" Then
+                            ' Necesitamos ejecutar otro procedimiento cuando se solicita un no de tarjetón?
+                            exito = _puertaEntradaService.IngresoPuertaEntrada(folio, fechaCita)
+                        Else
+                            exito = _puertaEntradaService.IngresoPuertaEntrada(folio, fechaCita)
+                        End If
 
-                                ' Cargar página de nuevo
-                                ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "loadCurrentPage", "loadCurrentPage();", True)
-                            Else
-                                ' No se ejecutó exitosamente
-                                msgError.Text = "El ingreso de la unidad no se realizó correctamente. Por favor intente de nuevo más tarde."
-                                divErrorPuertaEntrada.Visible = True
-                            End If
-                        Catch ex As Exception
-                            Dim mensaje As String = String.Format("Error al realizar el ingreso de la unidad. Mensaje: {0}", ex.Message)
-                            msgError.Text = mensaje
+                        If exito > 0 Then
+                            ' Mostrar mensaje si el procedimiento se ejecutó con exito
+                            ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "msgIngresado", "alert('Ingreso de unidad realizado con éxito. El módulo será limpiado.');", True)
+
+                            ' Cargar página de nuevo
+                            ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "loadCurrentPage", "loadCurrentPage();", True)
+                        Else
+                            ' No se ejecutó exitosamente
+                            msgError.Text = "El ingreso de la unidad no se realizó correctamente. Por favor intente de nuevo más tarde."
                             divErrorPuertaEntrada.Visible = True
-
-                            Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
-                        End Try
-                    Else
-                        ' El número de tarjetón debe ser numérico
-                        msgError.Text = msjNoTarjNumerico
+                        End If
+                    Catch ex As Exception
+                        Dim mensaje As String = String.Format("Error al realizar el ingreso de la unidad. Mensaje: {0}", ex.Message)
+                        msgError.Text = mensaje
                         divErrorPuertaEntrada.Visible = True
-                    End If
+
+                        Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
+                    End Try
                 Else
                     ' El folio debe ser numérico
                     msgError.Text = msjFolioNumerico
@@ -425,6 +445,18 @@ Public Class PuertaEntrada
         msgError.Text = ""
         divErrorPuertaEntrada.Visible = False
     End Sub
+
+    Private Function ExtImagenEsValida(extension As String) As Boolean
+        extension = extension.ToLower().Trim()
+        For Each validExtension As String In extImagValidas
+            If extension = validExtension Then
+                Return True
+            End If
+        Next
+
+        Return False
+    End Function
+
 
     Public Sub LimpiarTodo()
 
