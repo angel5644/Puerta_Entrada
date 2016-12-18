@@ -175,7 +175,7 @@ Public Class PuertaEntrada
                 ' id image/png: 15697
                 ' id pdf file: 3009
                 ' Obtener el archivo
-                docId = 15697 ' test
+                'docId = 15697 ' test
                 Dim doc As RequestDocument = _puertaEntradaService.ReadFile(docId)
                 lblNombreArchivo.Text = doc.P_DocumentName
 
