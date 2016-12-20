@@ -214,6 +214,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Account\Web.config" />
     <Content Include="Content\images\ui-bg_glass_75_e6e6e6_1x400.png.bak2" />
+    <None Include="My Project\PublishProfiles\ProfilePuertaEntrada.pubxml" />
     <None Include="My Project\PublishProfiles\Puerta_Entrada.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="PuertaEntrada.aspx" />
