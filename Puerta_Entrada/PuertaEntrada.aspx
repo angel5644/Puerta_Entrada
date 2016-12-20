@@ -109,6 +109,7 @@
 
             </div>
         </div>
+        <asp:Label ID="lblMostrarArchivo" runat="server" Text="" Visible="false"></asp:Label>
         <asp:Label ID="lblP_EnableVGM" runat="server" Text="" Visible="false"></asp:Label>
         <asp:Label ID="lblP_SolTarjeton" runat="server" Text="" Visible="false"></asp:Label>
 

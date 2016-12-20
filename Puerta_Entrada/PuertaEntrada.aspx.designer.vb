@@ -185,6 +185,15 @@ Partial Public Class PuertaEntrada
     Protected WithEvents btnRegistrarDiscrepancia As Global.System.Web.UI.HtmlControls.HtmlInputButton
     
     '''<summary>
+    '''lblMostrarArchivo control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblMostrarArchivo As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
     '''lblP_EnableVGM control.
     '''</summary>
     '''<remarks>

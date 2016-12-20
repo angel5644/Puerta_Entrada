@@ -15,13 +15,15 @@ Public Class PuertaEntrada
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        '_puertaEntradaService.F_GetRequestDocument(3009)
+
         If (Not IsPostBack) Then
             gridIngresoUnidades.DataSource = InicializarDatatableIngreso()
             gridIngresoUnidades.DataBind()
         End If
 
         ' Volver a crear al hacer postback
-        If lblP_EnableVGM.Text = "Y" Then
+        If lblP_EnableVGM.Text = "Y" And lblMostrarArchivo.Text = "Y" Then
             AgregarBotonDinamico()
         End If
 
@@ -112,15 +114,24 @@ Public Class PuertaEntrada
                         If info.P_EnableVGM = "Y" Then
                             info.P_Cursor.Columns.Add("Archivo")
                         End If
+                        If info.P_Cursor.Rows.Count > 0 Then
+                            If info.P_EnableVGM = "Y" Then
+                                lblMostrarArchivo.Text = "Y"
+                                AgregarBotonDinamico()
+                            End If
+                        Else
+                            ' Llenar con datos vacios
+                            Dim row As DataRow = info.P_Cursor.NewRow()
+                            For i As Integer = 0 To info.P_Cursor.Columns.Count - 1
+                                row(i) = ""
+                            Next i
+
+                            info.P_Cursor.Rows.Add(row)
+                        End If
 
                         ' Popular info del cursor p_InfoCita
                         gridIngresoUnidades.DataSource = info.P_Cursor
                         gridIngresoUnidades.DataBind()
-
-                        ' Agregar boton archivo
-                        If info.P_EnableVGM = "Y" Then
-                            AgregarBotonDinamico()
-                        End If
 
                         ' Validar variables
                         If info.P_AnotherPass = "Y" Then

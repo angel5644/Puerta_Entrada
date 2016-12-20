@@ -8,6 +8,11 @@
     font-family: 'Times New Roman';
 }
 
+.table-responsive
+{
+    overflow-x: auto;
+}
+
 /*Arreglar width de modal historial de apoyo*/
 .modal-limit-file{
     min-width: 800px; 
