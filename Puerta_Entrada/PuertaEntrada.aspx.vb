@@ -1,4 +1,5 @@
 ﻿Imports Oracle.ManagedDataAccess.Client
+Imports System.Linq
 
 Public Class PuertaEntrada
     Inherits System.Web.UI.Page
@@ -173,7 +174,7 @@ Public Class PuertaEntrada
         LimpiarPanelMensajes()
 
         Try
-            Dim requestId As String = gridIngresoUnidades.Rows(0).Cells(1).Text ' Request cell value 
+            Dim requestId As String = ObtenerValorCelda(gridIngresoUnidades, 0, "Folio") ' Folio cell value 
             Dim docId As Integer = 0
             Dim idConvertido As Boolean = Integer.TryParse(requestId, docId) ' get id 'width=""500px"" height=""600px""
 
@@ -187,7 +188,7 @@ Public Class PuertaEntrada
                 ' id pdf file: 3009
                 ' Obtener el archivo
                 'docId = 15697 ' test
-                Dim doc As RequestDocument = _puertaEntradaService.ReadFile(docId)
+                Dim doc As RequestDocument = _puertaEntradaService.F_GetRequestDocument(docId)
                 lblNombreArchivo.Text = doc.P_DocumentName
 
                 ' Comprobar si es archivo pdf
@@ -406,12 +407,14 @@ Public Class PuertaEntrada
                     Try
                         ' Ingresar unidad
                         Dim exito As Integer = 0
-                        If lblP_SolTarjeton.Text = "Y" Then
-                            ' Necesitamos ejecutar otro procedimiento cuando se solicita un no de tarjetón?
-                            exito = _puertaEntradaService.IngresoPuertaEntrada(folio, fechaCita)
-                        Else
-                            exito = _puertaEntradaService.IngresoPuertaEntrada(folio, fechaCita)
-                        End If
+                        Dim p_SolTarjeton As String = lblP_SolTarjeton.Text
+                        'If lblP_SolTarjeton.Text = "Y" Then
+                        '    ' Necesitamos ejecutar otro procedimiento cuando se solicita un no de tarjetón?
+                        '    exito = _puertaEntradaService.IngresoPuertaEntrada(folio, fechaCita)
+                        'Else
+                        '    exito = _puertaEntradaService.IngresoPuertaEntrada(folio, fechaCita)
+                        'End If
+                        exito = _puertaEntradaService.IngresoPuertaEntrada(folio, fechaCita, p_SolTarjeton)
 
                         If exito > 0 Then
                             ' Mostrar mensaje si el procedimiento se ejecutó con exito
@@ -468,6 +471,20 @@ Public Class PuertaEntrada
         Return False
     End Function
 
+    Private Function ObtenerValorCelda(grid As GridView, numFila As Integer, nombreColumna As String) As String
+        Dim index As Integer
+        Dim valor As String = ""
+
+        For Each tc As TableCell In grid.HeaderRow.Cells
+            If tc.Text.Equals(nombreColumna) Then
+                index = grid.HeaderRow.Cells.GetCellIndex(tc)
+                valor = grid.Rows(numFila).Cells(index).Text
+                Exit For
+            End If
+        Next
+
+        Return valor
+    End Function
 
     Public Sub LimpiarTodo()
 

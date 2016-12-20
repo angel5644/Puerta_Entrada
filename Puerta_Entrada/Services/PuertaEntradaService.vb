@@ -343,7 +343,7 @@ Public Class PuertaEntradaService
         End Using
     End Function
 
-    Public Function IngresoPuertaEntrada(p_FolioTrsp As Integer, p_FechaCita As Date) As Integer
+    Public Function IngresoPuertaEntrada(p_FolioTrsp As Integer, p_FechaCita As Date, p_Tarjeton As String) As Integer
 
 
         Using conn As New OracleConnection(dbContext.ObtenerCadenaConexion())
@@ -354,11 +354,12 @@ Public Class PuertaEntradaService
 
                     cmdComando.CommandType = CommandType.StoredProcedure
 
-                    'p_IngresoPuertaEntrada(p_FolioTrsp IN NUMBER, p_FechaCita IN DATE) IS
+                    'Cts.pk_cts.p_IngresoPuertaEntrada(p_FolioTrsp IN NUMBER, p_FechaCita IN DATE, p_Tarjeton IN VARCHAR2)
 
                     'Parametros de Entrada
                     cmdComando.Parameters.Add("p_FolioTrsp", OracleDbType.Int32, p_FolioTrsp, ParameterDirection.Input)
                     cmdComando.Parameters.Add("p_FechaCita", OracleDbType.Date, p_FechaCita, ParameterDirection.Input)
+                    cmdComando.Parameters.Add("p_Tarjeton", OracleDbType.Varchar2, p_Tarjeton, ParameterDirection.Input)
 
                     cmdComando.ExecuteNonQuery()
 
