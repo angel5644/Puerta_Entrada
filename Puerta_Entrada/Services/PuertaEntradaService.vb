@@ -425,7 +425,7 @@ Public Class PuertaEntradaService
             Try
                 conn.Open()
 
-                Using cmdComando As New OracleCommand("CTS.PK_CTS.p_IngresoPuertaEntrada", conn)
+                Using cmdComando As New OracleCommand("WEBCTS.PK_ADMIN_REPOSITORY.F_GetRequestDocument", conn)
 
                     cmdComando.CommandType = CommandType.StoredProcedure
 
@@ -433,28 +433,45 @@ Public Class PuertaEntradaService
 
                     ''Parametros de Entrada
                     cmdComando.BindByName = True
-                    cmdComando.Parameters.Add("ret_value", OracleDbType.Blob, ParameterDirection.ReturnValue)
+                    Dim p0 As OracleParameter = New OracleParameter("ret_value", OracleDbType.Blob)
+                    p0.Direction = ParameterDirection.ReturnValue
+                    cmdComando.Parameters.Add(p0)
 
                     'Parametros de Entrada
-                    cmdComando.Parameters.Add("p_documentId", p_documentId)
+                    Dim p As OracleParameter = New OracleParameter("p_documentId", OracleDbType.Int32)
+                    p.Value = p_documentId
+                    p.Direction = ParameterDirection.Input
+                    cmdComando.Parameters.Add(p)
 
                     'Parametros de Salida
-                    cmdComando.Parameters.Add("p_documentName", OracleDbType.Varchar2, 128)
-                    cmdComando.Parameters.Add("p_documentExtension", OracleDbType.Varchar2, 8)
+                    Dim p2 As OracleParameter = New OracleParameter("p_documentName", OracleDbType.Varchar2)
+                    p2.Size = 128
+                    p2.Direction = ParameterDirection.Output
+                    cmdComando.Parameters.Add(p2)
+                    Dim p3 As OracleParameter = New OracleParameter("p_documentExtension", OracleDbType.Varchar2)
+                    p3.Size = 8
+                    p3.Direction = ParameterDirection.Output
+                    cmdComando.Parameters.Add(p3)
 
+                    cmdComando.ExecuteNonQuery()
 
-                    'result.P_DocumentName = cmdComando.Parameters(0).Value.ToString()
-                    'result.P_DocumentExtension = cmdComando.Parameters(1).Value.ToString()
-                    'result.P_DocumentPath = cmdComando.Parameters(2).Value.ToString()
+                    ' Leer info
+                    Dim name As String = cmdComando.Parameters("p_documentName").Value.ToString()
+                    Dim ext As String = cmdComando.Parameters("p_documentExtension").Value.ToString()
+                    Dim docBlob As Oracle.ManagedDataAccess.Types.OracleBlob = DirectCast(cmdComando.Parameters("ret_value").Value, Oracle.ManagedDataAccess.Types.OracleBlob)
 
-                    Using dr As OracleDataReader = cmdComando.ExecuteReader()
-                        Dim doc As Oracle.ManagedDataAccess.Types.OracleBlob = dr.GetOracleBlob(0)
-                        Dim name As String = dr.GetString(2)
-                        Dim extension As String = dr.GetString(3)
-                    End Using
+                    ' Leer archivo blob en array de bytes
+                    Dim docData As Byte() = New Byte(docBlob.Length - 1) {}
+                    docBlob.Read(docData, 0, Convert.ToInt32(docBlob.Length))
+
+                    ' Regresar info
+                    result.P_DocumentName = name
+                    result.P_DocumentExtension = ext
+                    result.File = docData
+
                 End Using
 
-                Return Nothing
+                Return result
 
             Catch oex As OracleException
                 Dim mensaje = String.Format("Error en la conexion a la base de datos. Error code: {0}. Mensaje: {1}. Detalles: {2}", oex.ErrorCode, oex.Message, oex.ToString())
