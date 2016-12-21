@@ -112,6 +112,7 @@
         <asp:Label ID="lblMostrarArchivo" runat="server" Text="" Visible="false"></asp:Label>
         <asp:Label ID="lblP_EnableVGM" runat="server" Text="" Visible="false"></asp:Label>
         <asp:Label ID="lblP_SolTarjeton" runat="server" Text="" Visible="false"></asp:Label>
+        <asp:Label ID="lblDocId" runat="server" Text="" Visible="false"></asp:Label>
 
         <%-- Tabla dinámica ingreso de unidades --%>
         <div class="row">

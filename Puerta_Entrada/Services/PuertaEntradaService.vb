@@ -1,4 +1,5 @@
 ﻿Imports Oracle.ManagedDataAccess.Client
+'Imports System.Data.OracleClient
 
 Public Class PuertaEntradaService
 
@@ -462,13 +463,14 @@ Public Class PuertaEntradaService
                     Dim docBlob As Oracle.ManagedDataAccess.Types.OracleBlob = DirectCast(cmdComando.Parameters("ret_value").Value, Oracle.ManagedDataAccess.Types.OracleBlob)
 
                     ' Leer archivo blob en array de bytes
-                    Dim docData As Byte() = New Byte(docBlob.Length - 1) {}
+                    Dim docData As Byte() = New Byte(docBlob.Length) {}
                     docBlob.Read(docData, 0, Convert.ToInt32(docBlob.Length))
 
                     ' Regresar info
                     result.P_DocumentName = name
                     result.P_DocumentExtension = ext
                     result.File = docData
+
 
                 End Using
 

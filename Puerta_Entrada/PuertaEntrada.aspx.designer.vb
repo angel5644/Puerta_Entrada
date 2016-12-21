@@ -212,6 +212,15 @@ Partial Public Class PuertaEntrada
     Protected WithEvents lblP_SolTarjeton As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''lblDocId control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblDocId As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''gridIngresoUnidades control.
     '''</summary>
     '''<remarks>

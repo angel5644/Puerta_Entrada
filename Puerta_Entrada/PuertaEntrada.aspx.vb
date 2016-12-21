@@ -113,15 +113,24 @@ Public Class PuertaEntrada
 
                         ' Agregar columna para archivo si p_EnableVGM = Y
                         If info.P_EnableVGM = "Y" Then
+                            ' Obtener document id
+                            Dim docIdText As String = info.P_Cursor.Rows(0)("DOC_ID").ToString()
+                            ' Validar que el document id sea válido
+                            Dim docId As Integer = 0
+                            Dim idConvertido = Integer.TryParse(docIdText, docId)
+                            If (idConvertido) Then
+                                ' Guardar doc id
+                                lblDocId.Text = docId.ToString()
+                            End If
+
+                            ' Esconder columna doc_id
+                            info.P_Cursor.Columns.Remove("DOC_ID")
+                            ' Agregar columna archivo
                             info.P_Cursor.Columns.Add("Archivo")
                         End If
-                        If info.P_Cursor.Rows.Count > 0 Then
-                            If info.P_EnableVGM = "Y" Then
-                                lblMostrarArchivo.Text = "Y"
-                                AgregarBotonDinamico()
-                            End If
-                        Else
-                            ' Llenar con datos vacios
+
+                        ' Llenar con vacios si no hay datos
+                        If info.P_Cursor.Rows.Count <= 0 Then
                             Dim row As DataRow = info.P_Cursor.NewRow()
                             For i As Integer = 0 To info.P_Cursor.Columns.Count - 1
                                 row(i) = ""
@@ -133,6 +142,14 @@ Public Class PuertaEntrada
                         ' Popular info del cursor p_InfoCita
                         gridIngresoUnidades.DataSource = info.P_Cursor
                         gridIngresoUnidades.DataBind()
+
+                        ' Agregar botón archivo si p_EnableVGM = Y
+                        If info.P_Cursor.Rows.Count > 0 Then
+                            If info.P_EnableVGM = "Y" Then
+                                lblMostrarArchivo.Text = "Y"
+                                AgregarBotonDinamico()
+                            End If
+                        End If
 
                         ' Validar variables
                         If info.P_AnotherPass = "Y" Then
@@ -174,7 +191,7 @@ Public Class PuertaEntrada
         LimpiarPanelMensajes()
 
         Try
-            Dim requestId As String = ObtenerValorCelda(gridIngresoUnidades, 0, "Folio") ' Folio cell value 
+            Dim requestId As String = lblDocId.Text ' Folio cell value 
             Dim docId As Integer = 0
             Dim idConvertido As Boolean = Integer.TryParse(requestId, docId) ' get id 'width=""500px"" height=""600px""
 
@@ -187,7 +204,7 @@ Public Class PuertaEntrada
                 ' id image/png: 15697
                 ' id pdf file: 3009
                 ' Obtener el archivo
-                'docId = 15697 ' test
+                'docId = 3009 ' test
                 Dim doc As RequestDocument = _puertaEntradaService.F_GetRequestDocument(docId)
                 lblNombreArchivo.Text = doc.P_DocumentName
 
