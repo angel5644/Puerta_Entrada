@@ -402,6 +402,7 @@
     <Compile Include="Models\Incident.vb" />
     <Compile Include="Models\InfoPuertaEntrada.vb" />
     <Compile Include="Models\InfoTrsp.vb" />
+    <Compile Include="Models\MyWebFormsFriendlyUrlResolver.vb" />
     <Compile Include="Models\RequestDocument .vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
