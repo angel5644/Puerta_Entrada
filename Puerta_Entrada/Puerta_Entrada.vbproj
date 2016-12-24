@@ -401,7 +401,9 @@
     </Compile>
     <Compile Include="Models\IdentityModels.vb" />
     <Compile Include="Models\Incident.vb" />
+    <Compile Include="Models\InfoCancelPass.vb" />
     <Compile Include="Models\InfoPuertaEntrada.vb" />
+    <Compile Include="Models\InfoTrspCancelar.vb" />
     <Compile Include="Models\InfoTrsp.vb" />
     <Compile Include="Models\MyWebFormsFriendlyUrlResolver.vb" />
     <Compile Include="Models\RequestDocument .vb" />
