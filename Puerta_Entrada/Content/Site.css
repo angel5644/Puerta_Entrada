@@ -14,7 +14,7 @@ body {
 /* Set widths on the form inputs since otherwise they're 100% wide */
 input[type="text"],
 input[type="password"] {
-    max-width: 280px;
+    /*max-width: 280px;*/
 }
 
 /* Responsive: Portrait tablets and up */

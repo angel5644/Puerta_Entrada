@@ -9,8 +9,6 @@ Public Class PuertaEntradaService
         dbContext = New PEDBContext()
     End Sub
 
-    ' Test comment
-
     ''' <summary>
     ''' Obtiene la información de la puerta de entrada
     ''' </summary>

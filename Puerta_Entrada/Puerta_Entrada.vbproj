@@ -218,6 +218,7 @@
     <None Include="My Project\PublishProfiles\ProfilePuertaEntrada.pubxml" />
     <None Include="My Project\PublishProfiles\Puerta_Entrada.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="CancelacionEntrada.aspx" />
     <Content Include="PuertaEntrada.aspx" />
     <Content Include="Content\Resources\1024_a_1279\adelante.png" />
     <Content Include="Content\Resources\1024_a_1279\adelanteTransparente.png" />
@@ -422,6 +423,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="CancelacionEntrada.aspx.designer.vb">
+      <DependentUpon>CancelacionEntrada.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CancelacionEntrada.aspx.vb">
+      <DependentUpon>CancelacionEntrada.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="PuertaEntrada.aspx.designer.vb">
       <DependentUpon>PuertaEntrada.aspx</DependentUpon>
