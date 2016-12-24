@@ -1,4 +1,4 @@
-﻿Public Class InfoCancellPass
+﻿Public Class InfoCancelPass
     Private _P_InfoTrsp As InfoTrspCancelar
     Public Property P_InfoTrsp() As InfoTrspCancelar
         Get
