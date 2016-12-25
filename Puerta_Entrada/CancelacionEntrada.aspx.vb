@@ -74,6 +74,9 @@ Public Class CancelacionEntrada
                 lblFechaValida.Text = fechaCita
                 lblPlacaValida.Text = placa
 
+                lblNombrePase.Text = folio
+                lblFechaPase.Text = fechaCita.ToString(formatoFecha)
+
                 ' Popular info del cursor p_InfoTrsp
                 txtPlacas.Value = infoCancel.P_InfoTrsp.Trsp_Plate_Number
                 txtOperador.Value = infoCancel.P_InfoTrsp.Trsp_Driver_Name

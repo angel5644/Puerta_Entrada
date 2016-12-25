@@ -108,7 +108,7 @@
         </div>
         <br />
         <div class="row">
-            <div class="col-md-2 col-md-offset-5">
+            <div class="col-md-2 pull-right">
                 <input type="button" value="Cancelar Pase" OnServerClick="AbrirModalCancelar" runat="server" class="btn btn-default" id="btnCancelarPase" />
             </div>
         </div>
@@ -127,7 +127,7 @@
                             </h4>
                         </div>
                         <div class="modal-body">
-                            <p>Realmente desea cancelar el pase de entrada <asp:Label ID="lblNombrePase" runat="server"></asp:Label> de la fecha <asp:Label ID="lblFechaPase" runat="server"></asp:Label></p>
+                            <p>Realmente desea cancelar el pase de entrada <b><asp:Label ID="lblNombrePase" runat="server"></asp:Label></b> de la fecha <b><asp:Label ID="lblFechaPase" runat="server"></asp:Label></b>?</p>
                         </div>
                         <div class="modal-footer">
                             <asp:LinkButton CssClass="btn btn-default" Text="Continuar" runat="server" OnClick="CancelarPase" ID="btnContinuarCancelar" ></asp:LinkButton>
