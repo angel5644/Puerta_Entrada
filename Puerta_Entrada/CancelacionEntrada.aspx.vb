@@ -6,9 +6,10 @@ Public Class CancelacionEntrada
 
     Private _puertaEntradaService As PuertaEntradaService = New PuertaEntradaService()
 
-    Private ReadOnly msjRequeridos As String = "Los campos folio, placa y fecha de cita son requeridos"
+    Private ReadOnly msjRequeridos As String = "Los campos folio y fecha de cita o placa y fecha de cita son requeridos"
     Private ReadOnly msjFechaFormato As String = "La fecha de la cita debe tener el formato dd/MM/yyyy"
     Private ReadOnly msjFolioNumerico As String = "El campo folio debe ser un valor numérico"
+    Private ReadOnly msjPlacaRequerida As String = "La placa es requerida si no se ingresa folio"
 
     Private ReadOnly msjCancelacionNoValida As String = "No es posible cancelar el pase. El folio, la placa o la fecha no son válidos"
     Private ReadOnly formatoFecha As String = "dd/MM/yyyy"
@@ -52,42 +53,25 @@ Public Class CancelacionEntrada
         Dim placa As String = txtPlaca.Value
 
         ' Validar campos
-        If Not String.IsNullOrEmpty(folio) And Not String.IsNullOrEmpty(fechaCita) And Not String.IsNullOrEmpty(placa) Then
+        Dim msj As String = String.Empty
+        Dim valido As Boolean = ValidarCampos(folio, fechaCita, placa, msj)
 
-            ' Validar que el folio sea un valor numérico
-            If IsNumeric(folio) Then
+        ' Buscar pase si los datos son válidos
+        If valido Then
+            Try
+                ' Ejecutar procedimiento
+                ' **************
 
-                Dim fechaConvertida As Date = Date.Now
-                Dim convertida As Boolean = Date.TryParseExact(fechaCita, formatoFecha, System.Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, fechaConvertida)
-
-                If (convertida) Then
-                    Try
-
-                        ' Ejecutar procedimiento buscar
-                        Dim info As InfoPuertaEntrada = _puertaEntradaService.GetInfoPuertaEntrada(folio, fechaConvertida)
-
-
-
-                    Catch ex As Exception
-                        Dim mensaje As String = String.Format("Error al buscar. Mensaje: {0}", ex.Message)
-                        msgError.Text = mensaje
-                        divErrorPuertaEntrada.Visible = True
-
-                        Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
-                    End Try
-                Else
-                    ' Fecha no es válida
-                    msgError.Text = msjFechaFormato
-                    divErrorPuertaEntrada.Visible = True
-                End If
-            Else
-                ' Folio no es válido
-                msgError.Text = msjFolioNumerico
+            Catch ex As Exception
+                Dim mensaje As String = String.Format("Error al buscar pase. Mensaje: {0}", ex.Message)
+                msgError.Text = mensaje
                 divErrorPuertaEntrada.Visible = True
-            End If
+
+                Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
+            End Try
         Else
-            ' Mostrar mensaje, campos requeridos
-            msgError.Text = msjRequeridos
+            ' Mostrar mensaje
+            msgError.Text = msj
             divErrorPuertaEntrada.Visible = True
         End If
 
@@ -97,24 +81,25 @@ Public Class CancelacionEntrada
     Protected Sub AbrirModalCancelar(sender As Object, e As EventArgs)
         LimpiarPanelMensajes()
 
-        ' Validar campos folio, placa y fecha
-        If txtFolio.Value = lblFolioValido.Text And Not String.IsNullOrEmpty(txtOperador.Value) Then
-            If txtFechaCita.Value = lblFechaValida.Text Then
-                If txtPlaca.Value = lblPlacaValida.Text Then
+        Dim folio As String = txtFolio.Value ' Obtener de la caja de texto placa
+        Dim fechaCita As String = txtFechaCita.Value
+        Dim placa As String = txtPlaca.Value
 
-                    ' Mostrar modal
-                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalCancelar", "$('#modalCancelar').modal();", True)
-                    upModalCancelar.Update()
-                Else
-                    msgError.Text = msjCancelacionNoValida
-                    divErrorPuertaEntrada.Visible = True
-                End If
-            Else
-                msgError.Text = msjCancelacionNoValida
-                divErrorPuertaEntrada.Visible = True
-            End If
+        If String.IsNullOrEmpty(folio) Then
+            ' Obtener de otra fuente
+            '*******
+        End If
+
+        ' Comprobar si pase existe
+        Dim msj As String = String.Empty
+        Dim existe As Boolean = PaseExiste(folio, fechaCita, placa, msj)
+
+        If existe Then
+            ' Mostrar modal
+            ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalCancelar", "$('#modalCancelar').modal();", True)
+            upModalCancelar.Update()
         Else
-            msgError.Text = msjCancelacionNoValida
+            msgError.Text = msj
             divErrorPuertaEntrada.Visible = True
         End If
 
@@ -124,62 +109,107 @@ Public Class CancelacionEntrada
     Protected Sub CancelarPase(sender As Object, e As EventArgs)
         LimpiarPanelMensajes()
 
-        Dim textoFolio As String = txtFolio.Value
-        Dim textoFechaCita As String = txtFechaCita.Value
-        Dim textoPlaca As String = txtPlaca.Value
+        Dim folio As String = txtFolio.Value
+        Dim fechaCita As String = txtFechaCita.Value
+        Dim placa As String = txtPlaca.Value
 
-        ' Validar folio, placa y fecha
-        If Not String.IsNullOrEmpty(textoFolio) And Not String.IsNullOrEmpty(textoFechaCita) And Not String.IsNullOrEmpty(textoPlaca) Then
-            ' Convertir fecha en formato especificado
-            Dim fechaCita As Date = Date.Now
-            Dim convertida As Boolean = Date.TryParseExact(textoFechaCita, formatoFecha, System.Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, fechaCita)
+        ' Obtener de la caja de texto placa
+        If String.IsNullOrEmpty(folio) Then
+            ' Obtener de otra fuente
 
-            ' Si la fecha es válida
-            If convertida Then
-                If IsNumeric(textoFolio) Then
-                    ' Convertir folio
-                    Dim folio As Integer = Integer.Parse(textoFolio)
+        End If
 
-                    Try
-                        ' Cancelar el pase ** Agregar procedimiento
-                        Dim exito As Integer = 0
+        ' Validar campos
+        Dim msj As String = String.Empty
+        Dim valido As Boolean = ValidarCampos(folio, fechaCita, placa, msj)
 
-                        If exito > 0 Then
-                            ' Mostrar mensaje si el procedimiento se ejecutó con exito
-                            ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "msgCancelado", "alert('El pase fue cancelado con éxito. El módulo será limpiado.');", True)
+        ' Cancelar pase si los datos son válidos
+        If valido Then
+            Try
+                ' Ejecutar procedimiento
+                ' **************
 
-                            ' Cargar página de nuevo
-                            ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "loadCurrentPage", "loadCurrentPage();", True)
-                        Else
-                            ' No se ejecutó exitosamente
-                            msgError.Text = "El pase no fue cancelado correctamente. Por favor intente de nuevo más tarde."
-                            divErrorPuertaEntrada.Visible = True
-                        End If
-                    Catch ex As Exception
-                        Dim mensaje As String = String.Format("Error al calcelar el pase. Mensaje: {0}", ex.Message)
-                        msgError.Text = mensaje
-                        divErrorPuertaEntrada.Visible = True
-
-                        Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
-                    End Try
-                Else
-                    ' El folio debe ser numérico
-                    msgError.Text = msjFolioNumerico
-                    divErrorPuertaEntrada.Visible = True
-                End If
-            Else
-                ' La fecha no esta en formato correcto
-                msgError.Text = msjFechaFormato
+            Catch ex As Exception
+                Dim mensaje As String = String.Format("Error al cancelar pase. Mensaje: {0}", ex.Message)
+                msgError.Text = mensaje
                 divErrorPuertaEntrada.Visible = True
-            End If
+
+                Debug.WriteLine(String.Format("{0}. Detalles: {1}", mensaje, ex.ToString()))
+            End Try
         Else
-            ' El folio, la placa o la fecha estan vacios
-            msgError.Text = msjRequeridos
+            ' Mostrar mensaje
+            msgError.Text = msj
             divErrorPuertaEntrada.Visible = True
         End If
 
         upPanelMensajes.Update()
     End Sub
+
+    Private Function ValidarCampos(ByVal folio As String, ByVal fechaCita As String, ByVal placa As String, ByRef msj As String) As Boolean
+
+        ' Validar campos
+        If (Not String.IsNullOrEmpty(folio) And Not String.IsNullOrEmpty(fechaCita)) Or (Not String.IsNullOrEmpty(placa) And Not String.IsNullOrEmpty(fechaCita)) Then
+            Dim fechaConvertida As Date = Date.Now
+            Dim convertida As Boolean = Date.TryParseExact(fechaCita, formatoFecha, System.Globalization.CultureInfo.InvariantCulture, Globalization.DateTimeStyles.None, fechaConvertida)
+
+            ' Validar fecha
+            If (convertida) Then
+                If Not String.IsNullOrEmpty(folio) Then
+                    ' Validar que el folio sea un valor numérico
+                    If IsNumeric(folio) Then
+                        ' Valido
+                        Return True
+                    Else
+                        ' Folio no es válido
+                        msj = msjFolioNumerico
+                    End If
+                Else
+                    If Not String.IsNullOrEmpty(placa) Then
+                        ' Valido 
+                        Return True
+                    Else
+                        ' Placa es requerida
+                        msj = msjPlacaRequerida
+                    End If
+                End If
+            Else
+                ' Fecha no es válida
+                msj = msjFechaFormato
+            End If
+        Else
+            ' Mostrar mensaje, campos requeridos
+            msj = msjRequeridos
+        End If
+
+        Return False
+    End Function
+
+    Private Function PaseExiste(ByVal folio As String, ByVal fechaCita As String, ByVal placa As String, ByRef msj As String) As Boolean
+
+        ' Validar folio y fecha
+        If txtFolio.Value = lblFolioValido.Text And Not String.IsNullOrEmpty(txtOperador.Value) Then
+            If txtFechaCita.Value = lblFechaValida.Text Then
+                ' Existe
+                Return True
+            Else
+                msj = msjCancelacionNoValida
+            End If
+        Else
+            ' Validar placa y fecha
+            If txtPlaca.Value = lblPlacaValida.Text And Not String.IsNullOrEmpty(txtOperador.Value) Then
+                If txtFechaCita.Value = lblFechaValida.Text Then
+                    ' Existe
+                    Return True
+                Else
+                    msj = msjCancelacionNoValida
+                End If
+            Else
+                msj = msjCancelacionNoValida
+            End If
+        End If
+
+        Return False
+    End Function
 
     Private Sub LimpiarPanelMensajes()
         msgSuccess.Text = ""

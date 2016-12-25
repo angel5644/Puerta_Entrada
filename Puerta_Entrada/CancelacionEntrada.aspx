@@ -12,7 +12,7 @@
     
     <script src="https://use.fontawesome.com/14d84931fc.js"></script>
     <script type="text/javascript" src='Scripts/jquery.form-validator.min.js'></script>
-    <script type="text/javascript" src='Scripts/puerta-entrada.js'></script>
+    <script type="text/javascript" src='Scripts/cancelacion-entrada.js'></script>
 </asp:content>
 
 <asp:Content ID="CancelarPaseContent" ContentPlaceHolderID="MainContent" runat="server">
@@ -42,11 +42,11 @@
                     <h4 class="col-md-1">Transporte</h4>
                     <label for="folio" class="col-md-1 control-label">Folio</label>
                     <div class="col-md-2">
-                        <input type="text" data-validation-error-msg="El campo folio debe ser un valor numérico" data-validation="number" class="form-control" required id="txtFolio" runat="server" placeholder="Folio">
+                        <input type="text" data-validation-optional="true" data-validation-error-msg="El campo folio debe ser un valor numérico" data-validation="number" onchange="borrarPlaca()" class="form-control txtFolio" id="txtFolio" runat="server" placeholder="Folio">
                     </div>
                     <label for="placa" class="col-md-1 control-label">Placa</label>
                     <div class="col-md-2">
-                        <input type="text" class="form-control" required id="txtPlaca" runat="server" placeholder="Placa">
+                        <input type="text" class="form-control txtPlaca" id="txtPlaca" onchange="borrarFolio()" runat="server" placeholder="Placa">
                     </div>
                     <div class="col-md-4">
                         <div class="row">
