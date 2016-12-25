@@ -38,75 +38,92 @@
         <%-- Formulario búsqueda --%>
         <div class="well">
             <div class="form-horizontal">
-                <div class="form-group">
-                    <h4 class="col-md-2">Transporte</h4>
-                    <label for="folio" class="col-md-1 control-label">Folio</label>
-                    <div class="col-md-2">
-                        <input type="text" data-validation-error-msg="El campo folio debe ser un valor numérico" data-validation="number" class="form-control" required id="txtFolio" runat="server" placeholder="Folio">
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row">
-                            <label for="fechaCita" class="col-md-4 control-label">Fecha cita</label>
-                            <div class="col-md-6" id="controlFechaCita">
-                                <div class="input-group">
-                                    <input type="text" class="form-control datepicker" required id="txtFechaCita" runat="server" placeholder="dd/mm/yyyy">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default open-datepicker" type="button"><i class="glyphicon glyphicon-calendar"></i></button>
-                                    </span>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <h4 class="col-md-2">Transporte</h4>
+                            <label for="folio" class="col-md-1 control-label">Folio</label>
+                            <div class="col-md-2">
+                                <input type="text" data-validation-error-msg="El campo folio debe ser un valor numérico" data-validation="number" class="form-control" required id="txtFolio" runat="server" placeholder="Folio">
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <label for="fechaCita" class="col-md-4 control-label">Fecha cita</label>
+                                    <div class="col-md-6" id="controlFechaCita">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control datepicker" required id="txtFechaCita" runat="server" placeholder="dd/mm/yyyy">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default open-datepicker" type="button"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="col-md-3">
+                                <asp:Button Text="Buscar" ID="btnBuscar" CssClass="btn btn-default" runat="server" OnClick="Buscar" />
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <asp:Button Text="Buscar" ID="btnBuscar" CssClass="btn btn-default" runat="server" OnClick="Buscar" />
-                    </div>
                 </div>
-                 <asp:Label ID="lblFolioValido" runat="server" Text="" Visible="false"></asp:Label>
-                 <asp:Label ID="lblFechaValida" runat="server" Text="" Visible="false"></asp:Label>
-                <div class="form-group">
-                    <label for="placas" class="col-md-1 control-label">Placas</label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" runat="server" readonly id="txtPlacas">
-                    </div>
-                    <label for="tipoTransporte" class="col-md-2 control-label">Tipo de Transporte</label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" runat="server" readonly id="txtTipoTrasporte" >
-                    </div>
-                    <label for="nombreTransportista" class="col-md-2 control-label">Nombre Transportista</label>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" runat="server" readonly id="txtNombreTransportista" >
+
+                <asp:Label ID="lblFolioValido" runat="server" Text="" Visible="false"></asp:Label>
+                <asp:Label ID="lblFechaValida" runat="server" Text="" Visible="false"></asp:Label>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="placas" class="col-md-1 control-label">Placas</label>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" runat="server" readonly id="txtPlacas">
+                            </div>
+                            <label for="tipoTransporte" class="col-md-2 control-label">Tipo de Transporte</label>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" runat="server" readonly id="txtTipoTrasporte">
+                            </div>
+                            <label for="nombreTransportista" class="col-md-2 control-label">Nombre Transportista</label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" runat="server" readonly id="txtNombreTransportista">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="licencia" class="col-md-1 control-label">Licencia</label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" runat="server" readonly id="txtLicencia" >
-                    </div>
-                    <label for="tipoLicencia" class="col-md-2 control-label" >Tipo de Licencia</label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" runat="server" readonly id="txtTipoLicencia">
-                    </div>
-                    <label for="operador" class="col-md-2 control-label">Operador</label>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" runat="server" readonly id="txtOperador">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="horaLlamado" class="col-md-1 control-label">Hora de Llamado</label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" runat="server" readonly id="txtHoraLlamado">
-                    </div>
-                    <label for="tipoPaseEntrada" class="col-md-2 control-label">Tipo de Pase de Entrada</label>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" runat="server" readonly id="txtTipoPaseEntrada">
-                    </div>
-                    <div class="col-md-offset-1 col-md-3">
-                        <input type="button" value="Registrar Discrepancia" OnServerClick="AbrirModalRegistrar" runat="server" class="btn btn-default" id="btnRegistrarDiscrepancia" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="licencia" class="col-md-1 control-label">Licencia</label>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" runat="server" readonly id="txtLicencia">
+                            </div>
+                            <label for="tipoLicencia" class="col-md-2 control-label">Tipo de Licencia</label>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" runat="server" readonly id="txtTipoLicencia">
+                            </div>
+                            <label for="operador" class="col-md-2 control-label">Operador</label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" runat="server" readonly id="txtOperador">
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="horaLlamado" class="col-md-1 control-label">Hora de Llamado</label>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" runat="server" readonly id="txtHoraLlamado">
+                            </div>
+                            <label for="tipoPaseEntrada" class="col-md-2 control-label">Tipo de Pase de Entrada</label>
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" runat="server" readonly id="txtTipoPaseEntrada">
+                            </div>
+                            <div class="col-md-offset-1 col-md-3">
+                                <input type="button" value="Registrar Discrepancia" onserverclick="AbrirModalRegistrar" runat="server" class="btn btn-default" id="btnRegistrarDiscrepancia" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <asp:Label ID="lblMostrarArchivo" runat="server" Text="" Visible="false"></asp:Label>
@@ -116,10 +133,13 @@
 
         <%-- Tabla dinámica ingreso de unidades --%>
         <div class="row">
-            <div class="col-md-12 table-responsive">
-                <asp:GridView ID="gridIngresoUnidades" AutoGenerateColumns="True" runat="server" CssClass="table table-bordered grid-table">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <asp:GridView ID="gridIngresoUnidades" AutoGenerateColumns="True" runat="server" CssClass="table table-bordered grid-table">
                     <%--<HeaderStyle CssClass="color-well-gray" />--%>
                 </asp:GridView>
+                </div>
+                
             </div>
         </div>
         <br />

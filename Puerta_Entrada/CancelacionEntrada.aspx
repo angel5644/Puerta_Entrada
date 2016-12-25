@@ -38,59 +38,72 @@
         <%-- Formulario búsqueda --%>
         <div class="well">
             <div class="form-horizontal">
-                <div class="form-group">
-                    <h4 class="col-md-1">Transporte</h4>
-                    <label for="folio" class="col-md-1 control-label">Folio</label>
-                    <div class="col-md-2">
-                        <input type="text" data-validation-optional="true" data-validation-error-msg="El campo folio debe ser un valor numérico" data-validation="number" onchange="borrarPlaca()" class="form-control txtFolio" id="txtFolio" runat="server" placeholder="Folio">
-                    </div>
-                    <label for="placa" class="col-md-1 control-label">Placa</label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control txtPlaca" id="txtPlaca" onchange="borrarFolio()" runat="server" placeholder="Placa">
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row">
-                            <label for="fechaCita" class="col-md-4 control-label">Fecha cita</label>
-                            <div class="col-md-6" id="controlFechaCita">
-                                <div class="input-group">
-                                    <input type="text" class="form-control datepicker" required id="txtFechaCita" runat="server" placeholder="dd/mm/yyyy">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-default open-datepicker" type="button"><i class="glyphicon glyphicon-calendar"></i></button>
-                                    </span>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <h4 class="col-md-1">Transporte</h4>
+                            <label for="folio" class="col-md-1 control-label">Folio</label>
+                            <div class="col-md-2">
+                                <input type="text" data-validation-optional="true" data-validation-error-msg="El campo folio debe ser un valor numérico" data-validation="number" onchange="borrarPlaca()" class="form-control txtFolio" id="txtFolio" runat="server" placeholder="Folio">
+                            </div>
+                            <label for="placa" class="col-md-1 control-label">Placa</label>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control txtPlaca" id="txtPlaca" onchange="borrarFolio()" runat="server" placeholder="Placa">
+                            </div>
+                            <div class="col-md-4">
+                                <div class="row">
+                                    <label for="fechaCita" class="col-md-4 control-label">Fecha cita</label>
+                                    <div class="col-md-6" id="controlFechaCita">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control datepicker" required id="txtFechaCita" runat="server" placeholder="dd/mm/yyyy">
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default open-datepicker" type="button"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="col-md-1">
+                                <asp:Button Text="Buscar" ID="btnBuscar" CssClass="btn btn-default pull-left" runat="server" OnClick="Buscar" />
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-1">
-                        <asp:Button Text="Buscar" ID="btnBuscar" CssClass="btn btn-default pull-left" runat="server" OnClick="Buscar" />
-                    </div>
                 </div>
+
                 <asp:Label ID="lblFolioValido" runat="server" Text="" Visible="false"></asp:Label>
                 <asp:Label ID="lblFechaValida" runat="server" Text="" Visible="false"></asp:Label>
                 <asp:Label ID="lblPlacaValida" runat="server" Text="" Visible="false"></asp:Label>
-                <div class="form-group">
-                    <label for="txtPlacas" class="col-md-1 control-label">Placas</label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" runat="server" readonly id="txtPlacas">
-                    </div>
-                    <label for="txtOperador" class="col-md-1 control-label">Operador</label>
-                    <div class="col-md-4">
-                        <input type="text" class="form-control" runat="server" readonly id="txtOperador">
-                    </div>
-                    <label for="txtTelefono" class="col-md-2 control-label">Teléfono Celular</label>
-                    <div class="col-md-2">
-                        <input type="text" class="form-control" runat="server" readonly id="txtTelefono">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="txtPlacas" class="col-md-1 control-label">Placas</label>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" runat="server" readonly id="txtPlacas">
+                            </div>
+                            <label for="txtOperador" class="col-md-1 control-label">Operador</label>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" runat="server" readonly id="txtOperador">
+                            </div>
+                            <label for="txtTelefono" class="col-md-2 control-label">Teléfono Celular</label>
+                            <div class="col-md-2">
+                                <input type="text" class="form-control" runat="server" readonly id="txtTelefono">
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
         <%-- Tabla dinámica ingreso de unidades --%>
         <div class="row">
-            <div class="col-md-12 table-responsive">
-                <asp:GridView ID="gridCancelarUnidades" AutoGenerateColumns="True" runat="server" CssClass="table table-bordered grid-table">
-                    <%--<HeaderStyle CssClass="color-well-gray" />--%>
-                </asp:GridView>
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <asp:GridView ID="gridCancelarUnidades" AutoGenerateColumns="True" runat="server" CssClass="table table-bordered grid-table">
+                        <%--<HeaderStyle CssClass="color-well-gray" />--%>
+                    </asp:GridView>
+                </div>
             </div>
         </div>
         <br />

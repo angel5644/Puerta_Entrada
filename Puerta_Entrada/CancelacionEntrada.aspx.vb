@@ -16,6 +16,10 @@ Public Class CancelacionEntrada
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        'Dim folio As Integer = 2256
+        'Dim fecha As New DateTime(2016, 12, 28)
+        'Dim r As InfoCancelPass = _puertaEntradaService.GetInfoCancelPass(2256, fecha, "")
+
         If (Not IsPostBack) Then
             gridCancelarUnidades.DataSource = InicializarDatatable()
             gridCancelarUnidades.DataBind()
@@ -48,19 +52,46 @@ Public Class CancelacionEntrada
         lblFechaValida.Text = String.Empty
         lblPlacaValida.Text = String.Empty
 
-        Dim folio As String = txtFolio.Value
-        Dim fechaCita As String = txtFechaCita.Value
+        Dim textoFolio As String = txtFolio.Value
+        Dim textoFechaCita As String = txtFechaCita.Value
         Dim placa As String = txtPlaca.Value
 
         ' Validar campos
         Dim msj As String = String.Empty
-        Dim valido As Boolean = ValidarCampos(folio, fechaCita, placa, msj)
+        Dim valido As Boolean = ValidarCampos(textoFolio, textoFechaCita, placa, msj)
 
         ' Buscar pase si los datos son válidos
         If valido Then
             Try
-                ' Ejecutar procedimiento
-                ' **************
+                Dim folio As Integer = Integer.Parse(textoFolio)
+                Dim fechaCita As Date = Date.ParseExact(textoFechaCita, formatoFecha, System.Globalization.CultureInfo.InvariantCulture)
+
+                ' Ejecutar procedimiento para obtener info cancel
+                Dim infoCancel As InfoCancelPass = _puertaEntradaService.GetInfoCancelPass(folio, fechaCita, placa)
+
+                ' Setear valores ocultos para posteriores validaciones
+                lblFolioValido.Text = folio
+                lblFechaValida.Text = fechaCita
+                lblPlacaValida.Text = placa
+
+                ' Popular info del cursor p_InfoTrsp
+                txtPlacas.Value = infoCancel.P_InfoTrsp.Trsp_Plate_Number
+                txtOperador.Value = infoCancel.P_InfoTrsp.Trsp_Driver_Name
+                txtTelefono.Value = infoCancel.P_InfoTrsp.Trsp_Call_Date
+
+                ' Llenar con vacios si no hay datos
+                If infoCancel.P_Cursor.Rows.Count <= 0 Then
+                    Dim row As DataRow = infoCancel.P_Cursor.NewRow()
+                    For i As Integer = 0 To infoCancel.P_Cursor.Columns.Count - 1
+                        row(i) = ""
+                    Next i
+
+                    infoCancel.P_Cursor.Rows.Add(row)
+                End If
+
+                ' Popular info del cursor P_Cursor
+                gridCancelarUnidades.DataSource = infoCancel.P_Cursor
+                gridCancelarUnidades.DataBind()
 
             Catch ex As Exception
                 Dim mensaje As String = String.Format("Error al buscar pase. Mensaje: {0}", ex.Message)

@@ -8,10 +8,10 @@
     font-family: 'Times New Roman';
 }
 
-.table-responsive
+/*.table-responsive
 {
     overflow-x: auto;
-}
+}*/
 
 /*Arreglar width de modal historial de apoyo*/
 .modal-limit-file{

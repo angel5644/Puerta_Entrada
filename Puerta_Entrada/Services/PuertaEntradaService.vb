@@ -14,7 +14,7 @@ Public Class PuertaEntradaService
     ''' </summary>
     ''' <param name="p_FolioTrsp">Folio</param>
     ''' <param name="p_FechaCita">Fecha de la cita</param>
-    ''' <returns></returns>
+    ''' <returns>Regresa InfoPuertaEntrada con información del ingreso de puerta de entrada</returns>
     Public Function GetInfoPuertaEntrada(ByVal p_FolioTrsp As Integer, ByVal p_FechaCita As Date) As InfoPuertaEntrada
         ' Variable para regresar ambos datatables
         Dim result As New InfoPuertaEntrada
@@ -181,13 +181,13 @@ Public Class PuertaEntradaService
                 Return result
             Catch oex As OracleException
                 ' Agregamos detalles de porque falló la conexion a la bd
-                Dim mensaje = String.Format("Error en la conexion a la base de datos. Error code: {0}. Mensaje: {1}. Detalles: {2}", oex.ErrorCode, oex.Message, oex.ToString())
+                Dim mensaje = String.Format("Error de oracle. Error code: {0}. Mensaje: {1}. Detalles: {2}", oex.ErrorCode, oex.Message, oex.ToString())
                 Debug.WriteLine(mensaje)
 
                 ' Regresamos datos vacios 
                 Throw
             Catch ex As Exception
-                Dim mensaje = String.Format("Error al obtener información de apoyos. Mensaje: {0}. Detalles: {1}", ex.Message, ex.ToString())
+                Dim mensaje = String.Format("Error al obtener información de puerta de entrada. Mensaje: {0}. Detalles: {1}", ex.Message, ex.ToString())
                 Debug.WriteLine(mensaje)
 
                 ' Regresamos datos vacios 
@@ -195,6 +195,138 @@ Public Class PuertaEntradaService
             End Try
         End Using
         ' --]
+    End Function
+
+    ''' <summary>
+    ''' Obtiene la información de un pase a cancelar
+    ''' </summary>
+    ''' <param name="p_FolioTrsp">Folio</param>
+    ''' <param name="p_FechaCita">Fecha de la cita</param>
+    ''' <param name="p_Placa">Placa</param>
+    ''' <returns>Regresa InfoCancelPass con informacion del pase a cancelar</returns>
+    Public Function GetInfoCancelPass(p_FolioTrsp As Integer?, p_FechaCita As Date, p_Placa As String) As InfoCancelPass
+        ' Variable para regresar ambos datatables
+        Dim result As New InfoCancelPass
+
+        ' Datatable que mapea cursor p_InfoTrsp
+        Dim p_InfoCita As DataTable = New DataTable("p_Cursor")
+        ' Objeto que mapea cursor p_InfoTrsp
+        Dim infoTrsp As InfoTrspCancelar = New InfoTrspCancelar
+
+        '11/04/00 | 38
+
+        Using conn As New OracleConnection(dbContext.ObtenerCadenaConexion())
+            Try
+                conn.Open()
+                Using cmdComando As New OracleCommand("CTS.PK_CTS.p_GetInfoCancelPass", conn)
+
+                    cmdComando.CommandType = CommandType.StoredProcedure
+
+                    'PROCEDURE p_GetInfoCancelPass(p_FolioTrsp IN NUMBER, p_FechaCita IN DATE, p_Placa IN VARCHAR2, p_InfoTrsp OUT C_CURC,p_Cursor OUT C_CURC) IS
+
+                    ' ** Parámetros de entrada 
+                    ' Folio
+                    If p_FolioTrsp.HasValue Then
+                        cmdComando.Parameters.Add("p_FolioTrsp", OracleDbType.Int32, p_FolioTrsp, ParameterDirection.Input)
+                    Else
+                        cmdComando.Parameters.Add("p_FolioTrsp", OracleDbType.Int32, DBNull.Value, ParameterDirection.Input)
+                    End If
+                    ' Fecha cita
+                    cmdComando.Parameters.Add("p_FechaCita", OracleDbType.Date, p_FechaCita, ParameterDirection.Input)
+                    ' Placa
+                    If Not String.IsNullOrEmpty(p_Placa) Then
+                        cmdComando.Parameters.Add("p_Placa", OracleDbType.Varchar2, p_Placa, ParameterDirection.Input)
+                    Else
+                        cmdComando.Parameters.Add("p_Placa", OracleDbType.Varchar2, DBNull.Value, ParameterDirection.Input)
+                    End If
+
+
+                    ' ** Parametros de Salida
+                    cmdComando.Parameters.Add("p_InfoTrsp", OracleDbType.RefCursor).Direction = ParameterDirection.Output
+                    cmdComando.Parameters.Add("p_Cursor", OracleDbType.RefCursor).Direction = ParameterDirection.Output
+
+                    'Leer resultado de procedimiento
+                    Using dr As OracleDataReader = cmdComando.ExecuteReader()
+                        If dr.HasRows Then
+                            While dr.Read()
+                                ' Leer primer cursor p_InfoTrsp
+                                infoTrsp = New InfoTrspCancelar
+
+                                If dr.IsDBNull(0) Then
+                                    infoTrsp.Trsp_Plate_Number = ""
+                                Else
+                                    infoTrsp.Trsp_Plate_Number = dr.GetString(0)
+                                End If
+
+                                If dr.IsDBNull(1) Then
+                                    infoTrsp.Trsp_Driver_Name = ""
+                                Else
+                                    infoTrsp.Trsp_Driver_Name = dr.GetString(1)
+                                End If
+
+                                If dr.IsDBNull(2) Then
+                                    infoTrsp.Trsp_Call_Date = ""
+                                Else
+                                    infoTrsp.Trsp_Call_Date = dr.GetDateTime(2)
+                                End If
+                            End While
+
+                            ' Checar si hay un segundo cursor
+                            dr.NextResult()
+
+                            ' Obtener nombres de columnas
+                            For i = 0 To dr.FieldCount - 1
+                                p_InfoCita.Columns.Add(dr.GetName(i))
+                            Next i
+
+                            If dr.HasRows Then
+                                Dim j As Integer = 0
+                                While (dr.Read())
+                                    ' Leer segundo cursor p_Cursor
+                                    Dim row As DataRow = p_InfoCita.NewRow()
+
+                                    For i As Integer = 0 To dr.FieldCount - 1
+                                        If dr.IsDBNull(i) Then
+                                            row(i) = ""
+                                        ElseIf IsDBNull(dr.GetValue(i)) Then
+                                            row(i) = ""
+                                        Else
+                                            Try
+                                                Dim value As String = dr.GetValue(i).ToString()
+                                                row(i) = value
+                                            Catch ex As Exception
+                                                row(i) = "Error"
+                                            End Try
+                                        End If
+                                    Next i
+
+                                    p_InfoCita.Rows.Add(row)
+                                    j = j + 1
+                                End While
+                            End If
+                        End If ' has rows
+                    End Using ' data reader
+
+                    result.P_InfoTrsp = infoTrsp
+                    result.P_Cursor = p_InfoCita
+                End Using ' command
+
+                Return result
+            Catch oex As OracleException
+                ' Agregamos detalles de porque falló la conexion a la bd
+                Dim mensaje = String.Format("Error de oracle. Error code: {0}. Mensaje: {1}. Detalles: {2}", oex.ErrorCode, oex.Message, oex.ToString())
+                Debug.WriteLine(mensaje)
+
+                ' Regresamos datos vacios 
+                Throw
+            Catch ex As Exception
+                Dim mensaje = String.Format("Error al obtener información de cancelar entrada. Mensaje: {0}. Detalles: {1}", ex.Message, ex.ToString())
+                Debug.WriteLine(mensaje)
+
+                ' Regresamos datos vacios 
+                Throw
+            End Try
+        End Using
     End Function
 
     Public Function WriteFile(id As Integer) As String
