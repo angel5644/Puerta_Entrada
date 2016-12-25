@@ -128,6 +128,19 @@ Public Class CancelacionEntrada
             Try
                 ' Ejecutar procedimiento
                 ' **************
+                Dim exito As Integer = 0
+
+                If exito > 0 Then
+                    ' Mostrar mensaje si el procedimiento se ejecutó con exito
+                    ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "msgCancelado", "alert('El pase fue cancelado con éxito. El módulo será limpiado.');", True)
+
+                    ' Cargar página de nuevo
+                    ScriptManager.RegisterClientScriptBlock(Me, Me.GetType(), "loadCurrentPage", "loadCurrentPage();", True)
+                Else
+                    ' No se ejecutó exitosamente
+                    msgError.Text = "El pase no fue cancelado correctamente. Por favor intente de nuevo más tarde."
+                    divErrorPuertaEntrada.Visible = True
+                End If
 
             Catch ex As Exception
                 Dim mensaje As String = String.Format("Error al cancelar pase. Mensaje: {0}", ex.Message)
