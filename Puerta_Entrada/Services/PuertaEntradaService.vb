@@ -198,6 +198,46 @@ Public Class PuertaEntradaService
     End Function
 
     ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="p_Folio">Folio</param>
+    ''' <param name="p_FechaCita">Fecha de cita</param>
+    ''' <returns>Regresa un 1 si se ejecutó con éxito, 0 en otro caso</returns>
+    Public Function CancelPassEntrance(p_Folio As Integer, p_FechaCita As Date) As Integer
+
+        Using conn As New OracleConnection(dbContext.ObtenerCadenaConexion())
+            Try
+                conn.Open()
+
+                Using cmdComando As New OracleCommand("WEBCTS.PK_TRANSPORTS.p_CancelPassEntrance", conn)
+
+                    cmdComando.CommandType = CommandType.StoredProcedure
+
+                    'PROCEDURE p_CancelPassEntrance (p_Folio IN NUMBER, p_FechaCita IN DATE) IS
+
+                    'Parametros de Entrada
+                    cmdComando.Parameters.Add("p_Folio", OracleDbType.Int32, p_Folio, ParameterDirection.Input)
+                    cmdComando.Parameters.Add("p_FechaCita", OracleDbType.Date, p_FechaCita, ParameterDirection.Input)
+
+                    cmdComando.ExecuteNonQuery()
+
+                    Return 1
+                End Using
+
+            Catch oex As OracleException
+                Dim mensaje = String.Format("Error de Oracle. Error code: {0}. Mensaje: {1}. Detalles: {2}", oex.ErrorCode, oex.Message, oex.ToString())
+                Debug.WriteLine(mensaje)
+
+                ' Regresamos datos vacios 
+                Throw
+            End Try
+
+        End Using
+
+        Return 0
+    End Function
+
+    ''' <summary>
     ''' Obtiene la información de un pase a cancelar
     ''' </summary>
     ''' <param name="p_FolioTrsp">Folio</param>

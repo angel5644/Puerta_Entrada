@@ -115,7 +115,7 @@ Public Class CancelacionEntrada
     Protected Sub AbrirModalCancelar(sender As Object, e As EventArgs)
         LimpiarPanelMensajes()
 
-        Dim folio As String = txtFolio.Value ' Obtener de la caja de texto placa
+        Dim folio As String = txtFolio.Value ' Obtener de la caja de texto folio
         Dim fechaCita As String = txtFechaCita.Value
         Dim placa As String = txtPlaca.Value
 
@@ -143,26 +143,27 @@ Public Class CancelacionEntrada
     Protected Sub CancelarPase(sender As Object, e As EventArgs)
         LimpiarPanelMensajes()
 
-        Dim folio As String = txtFolio.Value
-        Dim fechaCita As String = txtFechaCita.Value
-        Dim placa As String = txtPlaca.Value
+        Dim folioTexto As String = txtFolio.Value
+        Dim fechaCitaTexto As String = txtFechaCita.Value
+        Dim placaTexto As String = txtPlaca.Value
 
         ' Obtener de la caja de texto placa
-        If String.IsNullOrEmpty(folio) Then
+        If String.IsNullOrEmpty(folioTexto) Then
             ' Obtener de otra fuente
 
         End If
 
         ' Validar campos
         Dim msj As String = String.Empty
-        Dim valido As Boolean = ValidarCampos(folio, fechaCita, placa, msj)
+        Dim existe As Boolean = PaseExiste(folioTexto, fechaCitaTexto, placaTexto, msj)
 
         ' Cancelar pase si los datos son válidos
-        If valido Then
+        If existe Then
             Try
                 ' Ejecutar procedimiento
-                ' **************
-                Dim exito As Integer = 0
+                Dim folio As Integer = Integer.Parse(folioTexto)
+                Dim fechaCita As Date = Date.ParseExact(fechaCitaTexto, formatoFecha, System.Globalization.CultureInfo.InvariantCulture)
+                Dim exito As Integer = _puertaEntradaService.CancelPassEntrance(folio, fechaCita)
 
                 If exito > 0 Then
                     ' Mostrar mensaje si el procedimiento se ejecutó con exito
@@ -234,8 +235,8 @@ Public Class CancelacionEntrada
     Private Function PaseExiste(ByVal folio As String, ByVal fechaCita As String, ByVal placa As String, ByRef msj As String) As Boolean
 
         ' Validar folio y fecha
-        If txtFolio.Value = lblFolioValido.Text And Not String.IsNullOrEmpty(txtOperador.Value) Then
-            If txtFechaCita.Value = lblFechaValida.Text Then
+        If (Not String.IsNullOrEmpty(txtFolio.Value) And txtFolio.Value = lblFolioValido.Text) And Not String.IsNullOrEmpty(txtOperador.Value) Then
+            If Not String.IsNullOrEmpty(txtFechaCita.Value) And txtFechaCita.Value = lblFechaValida.Text Then
                 ' Existe
                 Return True
             Else
@@ -243,8 +244,8 @@ Public Class CancelacionEntrada
             End If
         Else
             ' Validar placa y fecha
-            If txtPlaca.Value = lblPlacaValida.Text And Not String.IsNullOrEmpty(txtOperador.Value) Then
-                If txtFechaCita.Value = lblFechaValida.Text Then
+            If (Not String.IsNullOrEmpty(txtPlaca.Value) And txtPlaca.Value = lblPlacaValida.Text) And Not String.IsNullOrEmpty(txtOperador.Value) Then
+                If Not String.IsNullOrEmpty(txtFechaCita.Value) And txtFechaCita.Value = lblFechaValida.Text Then
                     ' Existe
                     Return True
                 Else
