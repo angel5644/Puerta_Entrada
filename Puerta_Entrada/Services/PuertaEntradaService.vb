@@ -209,7 +209,7 @@ Public Class PuertaEntradaService
             Try
                 conn.Open()
 
-                Using cmdComando As New OracleCommand("WEBCTS.PK_TRANSPORTS.p_CancelPassEntrance", conn)
+                Using cmdComando As New OracleCommand("CTS.PK_CTS.p_CancelPassEntrance", conn)
 
                     cmdComando.CommandType = CommandType.StoredProcedure
 

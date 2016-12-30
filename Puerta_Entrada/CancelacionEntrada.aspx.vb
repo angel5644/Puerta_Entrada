@@ -63,7 +63,11 @@ Public Class CancelacionEntrada
         ' Buscar pase si los datos son válidos
         If valido Then
             Try
-                Dim folio As Integer = Integer.Parse(textoFolio)
+                Dim folio As Integer? = Nothing
+                If (Not String.IsNullOrEmpty(textoFolio)) Then
+                    ' Ya no se valida que sea entero porque ya se validó anteriormente
+                    folio = Integer.Parse(textoFolio)
+                End If
                 Dim fechaCita As Date = Date.ParseExact(textoFechaCita, formatoFecha, System.Globalization.CultureInfo.InvariantCulture)
 
                 ' Ejecutar procedimiento para obtener info cancel

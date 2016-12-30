@@ -12,7 +12,7 @@
         format: 'dd/mm/yyyy',
         todayHighlight: true,
         language: 'es',
-        //startDate: '-3d' // Registringir fecha en el pasado
+        //startDate: '-3d' // Restringir fecha en el pasado
     }).off('focus')
               .click(function () {
                   $(this).datepicker('show');
