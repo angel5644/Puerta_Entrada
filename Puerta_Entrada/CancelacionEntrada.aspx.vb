@@ -52,9 +52,9 @@ Public Class CancelacionEntrada
         lblFechaValida.Text = String.Empty
         lblPlacaValida.Text = String.Empty
 
-        Dim textoFolio As String = txtFolio.Value
-        Dim textoFechaCita As String = txtFechaCita.Value
-        Dim placa As String = txtPlaca.Value
+        Dim textoFolio As String = txtFolio.Value.Trim()
+        Dim textoFechaCita As String = txtFechaCita.Value.Trim()
+        Dim placa As String = txtPlaca.Value.Trim()
 
         ' Validar campos
         Dim msj As String = String.Empty
@@ -67,6 +67,10 @@ Public Class CancelacionEntrada
                 If (Not String.IsNullOrEmpty(textoFolio)) Then
                     ' Ya no se valida que sea entero porque ya se validó anteriormente
                     folio = Integer.Parse(textoFolio)
+
+                    lblNombrePase.Text = textoFolio
+                Else
+                    lblNombrePase.Text = placa
                 End If
                 Dim fechaCita As Date = Date.ParseExact(textoFechaCita, formatoFecha, System.Globalization.CultureInfo.InvariantCulture)
 
@@ -74,11 +78,10 @@ Public Class CancelacionEntrada
                 Dim infoCancel As InfoCancelPass = _puertaEntradaService.GetInfoCancelPass(folio, fechaCita, placa)
 
                 ' Setear valores ocultos para posteriores validaciones
-                lblFolioValido.Text = folio
+                lblFolioValido.Text = infoCancel.P_InfoTrsp.FolioPass
                 lblFechaValida.Text = fechaCita
                 lblPlacaValida.Text = placa
 
-                lblNombrePase.Text = folio
                 lblFechaPase.Text = fechaCita.ToString(formatoFecha)
 
                 ' Popular info del cursor p_InfoTrsp
@@ -119,13 +122,13 @@ Public Class CancelacionEntrada
     Protected Sub AbrirModalCancelar(sender As Object, e As EventArgs)
         LimpiarPanelMensajes()
 
-        Dim folio As String = txtFolio.Value ' Obtener de la caja de texto folio
-        Dim fechaCita As String = txtFechaCita.Value
-        Dim placa As String = txtPlaca.Value
+        Dim folio As String = txtFolio.Value.Trim() ' Obtener de la caja de texto folio
+        Dim fechaCita As String = txtFechaCita.Value.Trim()
+        Dim placa As String = txtPlaca.Value.Trim()
 
         If String.IsNullOrEmpty(folio) Then
             ' Obtener de otra fuente
-            '*******
+            folio = lblFolioValido.Text
         End If
 
         ' Comprobar si pase existe
@@ -147,14 +150,14 @@ Public Class CancelacionEntrada
     Protected Sub CancelarPase(sender As Object, e As EventArgs)
         LimpiarPanelMensajes()
 
-        Dim folioTexto As String = txtFolio.Value
-        Dim fechaCitaTexto As String = txtFechaCita.Value
-        Dim placaTexto As String = txtPlaca.Value
+        Dim folioTexto As String = txtFolio.Value.Trim()
+        Dim fechaCitaTexto As String = txtFechaCita.Value.Trim()
+        Dim placaTexto As String = txtPlaca.Value.Trim()
 
         ' Obtener de la caja de texto placa
         If String.IsNullOrEmpty(folioTexto) Then
             ' Obtener de otra fuente
-
+            folioTexto = lblFolioValido.Text
         End If
 
         ' Validar campos

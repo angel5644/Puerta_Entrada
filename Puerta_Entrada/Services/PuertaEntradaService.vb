@@ -309,6 +309,12 @@ Public Class PuertaEntradaService
                                 Else
                                     infoTrsp.Trsp_Call_Date = dr.GetDateTime(2)
                                 End If
+
+                                If dr.IsDBNull(3) Then
+                                    infoTrsp.FolioPass = ""
+                                Else
+                                    infoTrsp.FolioPass = dr.GetInt32(3)
+                                End If
                             End While
 
                             ' Checar si hay un segundo cursor

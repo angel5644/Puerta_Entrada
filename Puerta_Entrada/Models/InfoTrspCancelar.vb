@@ -29,4 +29,15 @@
             _Trsp_Driver_Name = value
         End Set
     End Property
+
+    Private _FolioPass As String
+    Public Property FolioPass() As String
+        Get
+            Return _FolioPass
+        End Get
+        Set(ByVal value As String)
+            _FolioPass = value
+        End Set
+    End Property
+
 End Class
