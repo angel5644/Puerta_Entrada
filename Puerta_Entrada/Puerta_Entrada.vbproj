@@ -184,9 +184,6 @@
     <Content Include="Account\Register.aspx" />
     <Content Include="Account\RegisterExternalLogin.aspx" />
     <Content Include="Contact.aspx" />
-    <Content Include="Content\bootstrap-datetimepicker-build.less" />
-    <Content Include="Content\bootstrap-datetimepicker.css" />
-    <Content Include="Content\bootstrap-datetimepicker.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -215,7 +212,6 @@
     <Content Include="Content\pat_1280_a_2440.css" />
     <Content Include="Content\puerta-entrada.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="Content\_bootstrap-datetimepicker.less" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="packages.config" />
     <Content Include="Account\Web.config" />
@@ -373,8 +369,6 @@
     <Content Include="Content\Resources\fondoNegro.png" />
     <Content Include="Content\Resources\mas.png" />
     <Content Include="Content\Resources\menos.png" />
-    <Content Include="Scripts\bootstrap-datetimepicker.js" />
-    <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\bootstrap_datepicker\bootstrap-datepicker.es.min.js" />
