@@ -7,23 +7,29 @@
         //modules : 'toggleDisabled'
     });
 
-    // Inicializar datepicker
-    $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        todayHighlight: true,
-        language: 'es',
-        //startDate: '-3d' // Registringir fecha en el pasado
-    }).off('focus')
-              .click(function () {
-                  $(this).datepicker('show');
-              });
-
-    $('.open-datepicker').click(function (event) {
+    $('#fechaCita').datetimepicker({
+        format: 'DD/MM/YYYY HH:mm',
+        locale: "es"
         
-        $(".datepicker").datepicker('show');
-
-        //return false;
     });
+
+    // Inicializar datepicker
+    //$('.datepicker').datepicker({
+    //    format: 'dd/mm/yyyy HH/mm',
+    //    todayHighlight: true,
+    //    language: 'es',
+    //    //startDate: '-3d' // Registringir fecha en el pasado
+    //}).off('focus')
+    //          .click(function () {
+    //              $(this).datepicker('show');
+    //          });
+
+    //$('.open-datepicker').click(function (event) {
+        
+    //    $(".datepicker").datepicker('show');
+
+    //    //return false;
+    //});
 });
 
 function validarModalTarjeton()

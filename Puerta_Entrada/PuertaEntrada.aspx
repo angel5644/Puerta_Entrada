@@ -3,12 +3,18 @@
 <asp:content contentplaceholderid="head" runat="server">
     <%-- Estilos --%>
     <link rel="stylesheet" href="Content/puerta-entrada.css" type="text/css" />
-    <link rel="stylesheet" href="Content/bootstrap_datepicker/bootstrap-datepicker.min.css" type="text/css" />
+    <%--<link rel="stylesheet" href="Content/bootstrap_datepicker/bootstrap-datepicker.min.css" type="text/css" />--%>
+    <link rel="stylesheet" href="/Content/bootstrap-datetimepicker.css" />
 
     <%-- Javascript --%>
     <script type="text/javascript" src='Scripts/jquery-1.10.2.min.js'></script>
-    <script type="text/javascript" src='Scripts/bootstrap_datepicker/bootstrap-datepicker.min.js'></script>
-    <script type="text/javascript" src='Scripts/bootstrap_datepicker/bootstrap-datepicker.es.min.js'></script>
+<%--    <script type="text/javascript" src='Scripts/bootstrap_datepicker/bootstrap-datepicker.min.js'></script>
+    <script type="text/javascript" src='Scripts/bootstrap_datepicker/bootstrap-datepicker.es.min.js'></script>--%>
+
+    <script type="text/javascript" src="/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/scripts/moment.min.js"></script>
+    <script type="text/javascript" src="/scripts/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="/scripts/bootstrap-datetimepicker.min.js"></script>
     
     <script src="https://use.fontawesome.com/14d84931fc.js"></script>
     <script type="text/javascript" src='Scripts/jquery.form-validator.min.js'></script>
@@ -46,20 +52,26 @@
                             <div class="col-md-2">
                                 <input type="text" data-validation-error-msg="El campo folio debe ser un valor numérico" data-validation="number" class="form-control" required id="txtFolio" runat="server" placeholder="Folio">
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <div class="row">
                                     <label for="fechaCita" class="col-md-4 control-label">Fecha cita</label>
                                     <div class="col-md-6" id="controlFechaCita">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control datepicker" required id="txtFechaCita" runat="server" placeholder="dd/mm/yyyy">
+                                        <%--<div class="input-group">
+                                            <input type="text" class="form-control datepicker" required id="txtFechaCita" runat="server" placeholder="dd/MM/yyyy HH/mm">
                                             <span class="input-group-btn">
                                                 <button class="btn btn-default open-datepicker" type="button"><i class="glyphicon glyphicon-calendar"></i></button>
+                                            </span>
+                                        </div>--%>
+                                        <div class="input-group date" id="fechaCita">
+                                            <input type="text" class="form-control" required id="txtFechaCita" runat="server" placeholder="dd/MM/yyyy HH:mm">
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
                                             </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <asp:Button Text="Buscar" ID="btnBuscar" CssClass="btn btn-default" runat="server" OnClick="Buscar" />
                             </div>
                         </div>

@@ -6,11 +6,11 @@ Public Class PuertaEntrada
 
     Private _puertaEntradaService As PuertaEntradaService = New PuertaEntradaService()
     Private ReadOnly msjFolioFechaRequerido As String = "Los campos folio y fecha de cita son requeridos"
-    Private ReadOnly msjFechaFormato As String = "La fecha de la cita debe tener el formato dd/MM/yyyy"
+    Private ReadOnly msjFechaFormato As String = "La fecha de la cita debe tener el formato dd/MM/yyyy HH:mm"
     Private ReadOnly msjFolioNumerico As String = "El campo folio debe ser un valor numérico"
     Private ReadOnly msjIngresoNoValido As String = "No es posible perimitir el ingreso. El folio o la fecha no son válidos"
     Private ReadOnly msjDiscrepanciaNoValida As String = "No es posible registrar la discrepancia. El folio o la fecha no son válidos"
-    Private ReadOnly formatoFecha As String = "dd/MM/yyyy"
+    Private ReadOnly formatoFecha As String = "dd/MM/yyyy HH:mm"
     Private ReadOnly msjNoTarjNumerico As String = "El campo número de tarjetón debe ser numérico"
     Private ReadOnly extImagValidas As String() = New String() {"jpg", "bmp", "gif", "png", "tif"} ' Agregar más extensiones si es necesario
 

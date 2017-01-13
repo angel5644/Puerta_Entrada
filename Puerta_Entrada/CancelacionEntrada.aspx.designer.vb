@@ -12,7 +12,7 @@ Option Explicit On
 
 
 Partial Public Class CancelacionEntrada
-    
+
     '''<summary>
     '''upPanelMensajes control.
     '''</summary>
@@ -21,7 +21,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents upPanelMensajes As Global.System.Web.UI.UpdatePanel
-    
+
     '''<summary>
     '''divErrorPuertaEntrada control.
     '''</summary>
@@ -30,7 +30,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents divErrorPuertaEntrada As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-    
+
     '''<summary>
     '''msgError control.
     '''</summary>
@@ -39,7 +39,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents msgError As Global.System.Web.UI.WebControls.Label
-    
+
     '''<summary>
     '''divSuccessPuertaEntrada control.
     '''</summary>
@@ -48,7 +48,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents divSuccessPuertaEntrada As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-    
+
     '''<summary>
     '''msgSuccess control.
     '''</summary>
@@ -57,7 +57,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents msgSuccess As Global.System.Web.UI.WebControls.Label
-    
+
     '''<summary>
     '''txtFolio control.
     '''</summary>
@@ -66,7 +66,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtFolio As Global.System.Web.UI.HtmlControls.HtmlInputText
-    
+
     '''<summary>
     '''txtPlaca control.
     '''</summary>
@@ -75,7 +75,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtPlaca As Global.System.Web.UI.HtmlControls.HtmlInputText
-    
+
     '''<summary>
     '''txtFechaCita control.
     '''</summary>
@@ -84,7 +84,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtFechaCita As Global.System.Web.UI.HtmlControls.HtmlInputText
-    
+
     '''<summary>
     '''btnBuscar control.
     '''</summary>
@@ -93,7 +93,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnBuscar As Global.System.Web.UI.WebControls.Button
-    
+
     '''<summary>
     '''lblFolioValido control.
     '''</summary>
@@ -102,7 +102,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblFolioValido As Global.System.Web.UI.WebControls.Label
-    
+
     '''<summary>
     '''lblFechaValida control.
     '''</summary>
@@ -111,7 +111,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblFechaValida As Global.System.Web.UI.WebControls.Label
-    
+
     '''<summary>
     '''lblPlacaValida control.
     '''</summary>
@@ -120,7 +120,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblPlacaValida As Global.System.Web.UI.WebControls.Label
-    
+
     '''<summary>
     '''txtPlacas control.
     '''</summary>
@@ -129,7 +129,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtPlacas As Global.System.Web.UI.HtmlControls.HtmlInputText
-    
+
     '''<summary>
     '''txtOperador control.
     '''</summary>
@@ -138,7 +138,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtOperador As Global.System.Web.UI.HtmlControls.HtmlInputText
-    
+
     '''<summary>
     '''txtTelefono control.
     '''</summary>
@@ -147,7 +147,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtTelefono As Global.System.Web.UI.HtmlControls.HtmlInputText
-    
+
     '''<summary>
     '''gridCancelarUnidades control.
     '''</summary>
@@ -156,7 +156,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents gridCancelarUnidades As Global.System.Web.UI.WebControls.GridView
-    
+
     '''<summary>
     '''btnCancelarPase control.
     '''</summary>
@@ -165,7 +165,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnCancelarPase As Global.System.Web.UI.HtmlControls.HtmlInputButton
-    
+
     '''<summary>
     '''upModalCancelar control.
     '''</summary>
@@ -174,7 +174,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents upModalCancelar As Global.System.Web.UI.UpdatePanel
-    
+
     '''<summary>
     '''lblTitModalCancelar control.
     '''</summary>
@@ -183,7 +183,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblTitModalCancelar As Global.System.Web.UI.WebControls.Label
-    
+
     '''<summary>
     '''lblNombrePase control.
     '''</summary>
@@ -192,7 +192,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblNombrePase As Global.System.Web.UI.WebControls.Label
-    
+
     '''<summary>
     '''lblFechaPase control.
     '''</summary>
@@ -201,7 +201,7 @@ Partial Public Class CancelacionEntrada
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblFechaPase As Global.System.Web.UI.WebControls.Label
-    
+
     '''<summary>
     '''btnContinuarCancelar control.
     '''</summary>

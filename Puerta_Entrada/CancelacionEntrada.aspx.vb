@@ -7,12 +7,12 @@ Public Class CancelacionEntrada
     Private _puertaEntradaService As PuertaEntradaService = New PuertaEntradaService()
 
     Private ReadOnly msjRequeridos As String = "Los campos folio y fecha de cita o placa y fecha de cita son requeridos"
-    Private ReadOnly msjFechaFormato As String = "La fecha de la cita debe tener el formato dd/MM/yyyy"
+    Private ReadOnly msjFechaFormato As String = "La fecha de la cita debe tener el formato dd/MM/yyyy HH:mm"
     Private ReadOnly msjFolioNumerico As String = "El campo folio debe ser un valor numérico"
     Private ReadOnly msjPlacaRequerida As String = "La placa es requerida si no se ingresa folio"
 
     Private ReadOnly msjCancelacionNoValida As String = "No es posible cancelar el pase. El folio, la placa o la fecha no son válidos"
-    Private ReadOnly formatoFecha As String = "dd/MM/yyyy"
+    Private ReadOnly formatoFecha As String = "dd/MM/yyyy HH:mm"
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
