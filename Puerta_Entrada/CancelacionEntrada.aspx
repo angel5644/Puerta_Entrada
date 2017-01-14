@@ -4,16 +4,16 @@
     <%-- Estilos --%>
     <link rel="stylesheet" href="Content/puerta-entrada.css" type="text/css" />
     <%--<link rel="stylesheet" href="Content/bootstrap_datepicker/bootstrap-datepicker.min.css" type="text/css" />--%>
-    <link rel="stylesheet" href="/Content/bootstrap-datetimepicker.css" />
+    <link rel="stylesheet" href="Content/bootstrap-datetimepicker.css" />
 
     <%-- Javascript --%>
     <script type="text/javascript" src='Scripts/jquery-1.10.2.min.js'></script>
 <%--    <script type="text/javascript" src='Scripts/bootstrap_datepicker/bootstrap-datepicker.min.js'></script>
     <script type="text/javascript" src='Scripts/bootstrap_datepicker/bootstrap-datepicker.es.min.js'></script>--%>
-    <script type="text/javascript" src="/scripts/moment.min.js"></script>
-    <script type="text/javascript" src="/scripts/moment-with-locales.min.js"></script>
-    <script type="text/javascript" src="/scripts/bootstrap-datetimepicker.min.js"></script>
-    
+    <script type="text/javascript" src="Scripts/moment.min.js"></script>
+    <script type="text/javascript" src="Scripts/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="Scripts/bootstrap-datetimepicker.min.js"></script>
+   
     <script src="https://use.fontawesome.com/14d84931fc.js"></script>
     <script type="text/javascript" src='Scripts/jquery.form-validator.min.js'></script>
     <script type="text/javascript" src='Scripts/cancelacion-entrada.js'></script>
@@ -109,7 +109,7 @@
         <%-- Tabla dinámica ingreso de unidades --%>
         <div class="row">
             <div class="col-md-12">
-                <div class="table-responsive">
+                <div class="table-responsive table-auto-responsive">
                     <asp:GridView ID="gridCancelarUnidades" AutoGenerateColumns="True" runat="server" CssClass="table table-bordered grid-table">
                         <%--<HeaderStyle CssClass="color-well-gray" />--%>
                     </asp:GridView>
