@@ -193,57 +193,64 @@ Public Class PuertaEntrada
             Dim docId As Integer = 0
             Dim idConvertido As Boolean = Integer.TryParse(requestId, docId) ' get id 'width=""500px"" height=""600px""
 
-            If idConvertido Then
-                Dim embed As String = ""
-                Dim fileType As String = ""
-                Dim esValido As Boolean = False ' Variable para saber si el archivo a mostrar le válido
-
-                ' id image jpg: 5748
-                ' id image/png: 15697
-                ' id pdf file: 3009
-                ' Obtener el archivo
-                'docId = 3009 ' test
-                Dim doc As RequestDocument = _puertaEntradaService.F_GetRequestDocument(docId)
-                lblNombreArchivo.Text = doc.P_DocumentName
-
-                ' Comprobar si es archivo pdf
-                If doc.P_DocumentExtension = "pdf" Then
-                    esValido = True
-                    fileType = "pdf"
-                    embed = "<object data=""{0}"" width=""100%"" height=""600px"" type=""application/pdf"" >"
-                    embed += "Si no puedes ver el archivo, lo puedes descargar desde <a href = ""{0}&download=1"">aquí</a>"
-                    embed += " o descargar <a target = ""_blank"" href = ""http://get.adobe.com/reader/"">Adobe PDF Reader</a> para ver el archivo."
-                    embed += "</object>"
-
-                    Dim url As String = String.Format(ResolveUrl("~/Default.aspx?Id={0}&fileType={1}"), docId, fileType)
-                    ltEmbed.Text = String.Format(embed, url)
-                    ltEmbed.Visible = True
-                Else
-                    If ExtImagenEsValida(doc.P_DocumentExtension) Then
-                        esValido = True
-                        fileType = String.Format("image/{0}", doc.P_DocumentExtension)
-
-                        ' Obtener datos de imagen
-                        Dim base64String As String = Convert.ToBase64String(doc.File, 0, doc.File.Length)
-
-                        ' Setear datos de imagen
-                        imageArchivo.ImageUrl = Convert.ToString(String.Format("data:{0};base64,", fileType)) & base64String
-                        imageArchivo.Visible = True
-                        imageArchivo.CssClass = "img-responsive"
-                    Else
-                        msgError.Text = "No es un extensión de imagen válida. Extensiones soportadas: jpg, bmp, gif, png, tif"
-                        divErrorPuertaEntrada.Visible = True
-                    End If
-                End If
-
-                If esValido Then
-                    ' Mostrar modal
-                    ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalFile", "$('#modalFile').modal();", True)
-                    upPanelFile.Update()
-                End If
+            If String.IsNullOrEmpty(requestId) Then
+                msgError.Text = "No hay documento de certificado VGM ligado"
+                divErrorPuertaEntrada.Visible = True
             Else
+                If idConvertido Then
+                    Dim embed As String = ""
+                    Dim fileType As String = ""
+                    Dim esValido As Boolean = False ' Variable para saber si el archivo a mostrar le válido
 
+                    ' id image jpg: 5748
+                    ' id image/png: 15697
+                    ' id pdf file: 3009
+                    ' Obtener el archivo
+                    'docId = 3009 ' test
+                    Dim doc As RequestDocument = _puertaEntradaService.F_GetRequestDocument(docId)
+                    lblNombreArchivo.Text = doc.P_DocumentName
+
+                    ' Comprobar si es archivo pdf
+                    If doc.P_DocumentExtension = "pdf" Then
+                        esValido = True
+                        fileType = "pdf"
+                        embed = "<object data=""{0}"" width=""100%"" height=""600px"" type=""application/pdf"" >"
+                        embed += "Si no puedes ver el archivo, lo puedes descargar desde <a href = ""{0}&download=1"">aquí</a>"
+                        embed += " o descargar <a target = ""_blank"" href = ""http://get.adobe.com/reader/"">Adobe PDF Reader</a> para ver el archivo."
+                        embed += "</object>"
+
+                        Dim url As String = String.Format(ResolveUrl("~/Default.aspx?Id={0}&fileType={1}"), docId, fileType)
+                        ltEmbed.Text = String.Format(embed, url)
+                        ltEmbed.Visible = True
+                    Else
+                        If ExtImagenEsValida(doc.P_DocumentExtension) Then
+                            esValido = True
+                            fileType = String.Format("image/{0}", doc.P_DocumentExtension)
+
+                            ' Obtener datos de imagen
+                            Dim base64String As String = Convert.ToBase64String(doc.File, 0, doc.File.Length)
+
+                            ' Setear datos de imagen
+                            imageArchivo.ImageUrl = Convert.ToString(String.Format("data:{0};base64,", fileType)) & base64String
+                            imageArchivo.Visible = True
+                            imageArchivo.CssClass = "img-responsive"
+                        Else
+                            msgError.Text = "No es un extensión de imagen válida. Extensiones soportadas: jpg, bmp, gif, png, tif"
+                            divErrorPuertaEntrada.Visible = True
+                        End If
+                    End If
+
+                    If esValido Then
+                        ' Mostrar modal
+                        ScriptManager.RegisterStartupScript(Page, Page.GetType(), "modalFile", "$('#modalFile').modal();", True)
+                        upPanelFile.Update()
+                    End If
+                Else
+                    msgError.Text = String.Format("No hay documento para el id {0}", docId)
+                    divErrorPuertaEntrada.Visible = True
+                End If
             End If
+            
         Catch ex As Exception
             Dim mensaje As String = String.Format("Error al abrir archivo. Mensaje: {0}", ex.Message)
 
